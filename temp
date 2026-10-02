@@ -1,1 +1,2062 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>India GK Map</title>
+
+
+<style>
+
+/* =========================================================
+   BASIC
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+
+    background: #ffffff;
+
+    color: #1d2733;
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+
+    position: relative;
+
+    text-align: center;
+
+    padding: 10px 20px 5px;
+
+    flex-shrink: 0;
+
+}
+
+h1 {
+
+    margin: 0;
+
+    font-size:
+        clamp(1.7rem, 3vw, 2.4rem);
+
+    font-weight: 700;
+
+    letter-spacing: 0.04em;
+
+}
+
+.subtitle {
+
+    margin-top: 2px;
+
+    font-size: 1rem;
+
+    color: #6b7785;
+
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+#backButton {
+
+    position: absolute;
+
+    left: 18px;
+
+    top: 14px;
+
+    padding:
+        7px 14px;
+
+    background: #ffffff;
+
+    color: #1f5f99;
+
+    border:
+        1px solid #c7d4e1;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    display: none;
+
+}
+
+#backButton:hover {
+
+    background: #f1f6fa;
+
+}
+
+
+/* =========================================================
+   MAP AREA
+========================================================= */
+
+#mapContainer {
+
+    flex: 1;
+
+    min-height: 0;
+
+    padding:
+        5px 15px 15px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+#mapContainer svg {
+
+    width: 100%;
+
+    height: 100%;
+
+    max-width: 1400px;
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   MAP REGION
+========================================================= */
+
+.region {
+
+    fill: #e3eaf2;
+
+    stroke: #718296;
+
+    stroke-width: 0.8;
+
+    vector-effect: non-scaling-stroke;
+
+    stroke-linejoin: round;
+
+    transition:
+        fill 0.12s ease,
+        stroke 0.12s ease;
+
+}
+
+.region:hover {
+
+    fill: #a9c3de;
+
+    stroke: #466985;
+
+}
+
+
+/* India states are clickable */
+
+.india-map .region {
+
+    cursor: pointer;
+
+}
+
+
+/* Districts are NOT clickable */
+
+.state-map .region {
+
+    cursor: default;
+
+}
+
+
+/* =========================================================
+   TOOLTIP
+========================================================= */
+
+#tooltip {
+
+    position: fixed;
+
+    z-index: 1000;
+
+    pointer-events: none;
+
+    display: none;
+
+    padding:
+        7px 12px;
+
+    background: #1d2733;
+
+    color: white;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.15);
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+
+    color: #6b7785;
+
+    text-align: center;
+
+    font-size: 16px;
+
+    line-height: 1.5;
+
+    padding: 20px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    header {
+
+        padding-top: 55px;
+
+    }
+
+    #backButton {
+
+        left: 12px;
+
+        top: 12px;
+
+    }
+
+    #mapContainer {
+
+        padding: 5px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <button
+        id="backButton"
+        type="button"
+    >
+        ← India
+    </button>
+
+
+    <h1 id="title">
+        India Map
+    </h1>
+
+
+    <div
+        id="subtitle"
+        class="subtitle"
+    >
+        Interactive Map
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAP
+===================================================== -->
+
+<main id="mapContainer">
+
+    <div class="status">
+        Loading India map...
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     TOOLTIP
+===================================================== -->
+
+<div id="tooltip"></div>
+
+
+
+<script>
+
+
+/* =========================================================
+   DATA SOURCES
+========================================================= */
+
+const INDIA_BASES = [
+
+    "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/INDIA/",
+
+    "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/INDIA/"
+
+];
+
+
+const STATE_BASES = [
+
+    "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/STATES/",
+
+    "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/STATES/"
+
+];
+
+
+const INDIA_FILE =
+    "INDIA_STATES.geojson";
+
+
+/* =========================================================
+   STATE FOLDER NAMES
+
+   IMPORTANT:
+   These are the actual folder names used by the dataset.
+
+   Folder:
+       STATES/MAHARASHTRA/
+
+   File:
+       MAHARASHTRA_DISTRICTS.geojson
+========================================================= */
+
+const STATE_FOLDER = {
+
+    "Andhra Pradesh":
+        "ANDHRA PRADESH",
+
+    "Arunachal Pradesh":
+        "ARUNACHAL PRADESH",
+
+    "Assam":
+        "ASSAM",
+
+    "Bihar":
+        "BIHAR",
+
+    "Chhattisgarh":
+        "CHHATTISGARH",
+
+    "Goa":
+        "GOA",
+
+    "Gujarat":
+        "GUJARAT",
+
+    "Haryana":
+        "HARYANA",
+
+    "Himachal Pradesh":
+        "HIMACHAL PRADESH",
+
+    "Jharkhand":
+        "JHARKHAND",
+
+    "Karnataka":
+        "KARNATAKA",
+
+    "Kerala":
+        "KERALA",
+
+    "Madhya Pradesh":
+        "MADHYA PRADESH",
+
+    "Maharashtra":
+        "MAHARASHTRA",
+
+    "Manipur":
+        "MANIPUR",
+
+    "Meghalaya":
+        "MEGHALAYA",
+
+    "Mizoram":
+        "MIZORAM",
+
+    "Nagaland":
+        "NAGALAND",
+
+    "Odisha":
+        "ORISSA",
+
+    "Punjab":
+        "PUNJAB",
+
+    "Rajasthan":
+        "RAJASTHAN",
+
+    "Sikkim":
+        "SIKKIM",
+
+    "Tamil Nadu":
+        "TAMIL NADU",
+
+    "Telangana":
+        "TELANGANA",
+
+    "Tripura":
+        "TRIPURA",
+
+    "Uttar Pradesh":
+        "UTTAR PRADESH",
+
+    "Uttarakhand":
+        "UTTARAKHAND",
+
+    "West Bengal":
+        "WEST BENGAL",
+
+    "Andaman and Nicobar Islands":
+        "ANDAMAN AND NICOBAR ISLANDS",
+
+    "Chandigarh":
+        "CHANDIGARH",
+
+    "Dadra and Nagar Haveli and Daman and Diu":
+        "DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
+
+    "Delhi":
+        "DELHI",
+
+    "Jammu and Kashmir":
+        "JAMMU AND KASHMIR",
+
+    "Ladakh":
+        "LADAKH",
+
+    "Lakshadweep":
+        "LAKSHADWEEP",
+
+    "Puducherry":
+        "PUDUCHERRY"
+
+};
+
+
+/* =========================================================
+   SPECIAL FILE NAME MAPPING
+
+   Usually:
+
+       FOLDER/FOLDER_DISTRICTS.geojson
+
+   But Odisha's repository folder uses ORISSA.
+========================================================= */
+
+const STATE_FILE_NAME = {
+
+    "Odisha":
+        "ODISHA_DISTRICTS.geojson"
+
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const mapContainer =
+    document.getElementById(
+        "mapContainer"
+    );
+
+
+const tooltip =
+    document.getElementById(
+        "tooltip"
+    );
+
+
+const titleElement =
+    document.getElementById(
+        "title"
+    );
+
+
+const subtitleElement =
+    document.getElementById(
+        "subtitle"
+    );
+
+
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
+
+
+/* =========================================================
+   NORMALIZE STATE NAME
+
+   THIS FIXES:
+
+       MAHARASHTRA
+       Maharashtra
+       maharashtra
+
+   All become:
+
+       Maharashtra
+========================================================= */
+
+const CANONICAL_STATES = {
+
+    "andhra pradesh":
+        "Andhra Pradesh",
+
+    "arunachal pradesh":
+        "Arunachal Pradesh",
+
+    "assam":
+        "Assam",
+
+    "bihar":
+        "Bihar",
+
+    "chhattisgarh":
+        "Chhattisgarh",
+
+    "goa":
+        "Goa",
+
+    "gujarat":
+        "Gujarat",
+
+    "haryana":
+        "Haryana",
+
+    "himachal pradesh":
+        "Himachal Pradesh",
+
+    "jharkhand":
+        "Jharkhand",
+
+    "karnataka":
+        "Karnataka",
+
+    "kerala":
+        "Kerala",
+
+    "madhya pradesh":
+        "Madhya Pradesh",
+
+    "maharashtra":
+        "Maharashtra",
+
+    "manipur":
+        "Manipur",
+
+    "meghalaya":
+        "Meghalaya",
+
+    "mizoram":
+        "Mizoram",
+
+    "nagaland":
+        "Nagaland",
+
+    "odisha":
+        "Odisha",
+
+    "orissa":
+        "Odisha",
+
+    "punjab":
+        "Punjab",
+
+    "rajasthan":
+        "Rajasthan",
+
+    "sikkim":
+        "Sikkim",
+
+    "tamil nadu":
+        "Tamil Nadu",
+
+    "telangana":
+        "Telangana",
+
+    "tripura":
+        "Tripura",
+
+    "uttar pradesh":
+        "Uttar Pradesh",
+
+    "uttarakhand":
+        "Uttarakhand",
+
+    "west bengal":
+        "West Bengal",
+
+    "andaman and nicobar islands":
+        "Andaman and Nicobar Islands",
+
+    "chandigarh":
+        "Chandigarh",
+
+    "dadra and nagar haveli and daman and diu":
+        "Dadra and Nagar Haveli and Daman and Diu",
+
+    "delhi":
+        "Delhi",
+
+    "jammu and kashmir":
+        "Jammu and Kashmir",
+
+    "ladakh":
+        "Ladakh",
+
+    "lakshadweep":
+        "Lakshadweep",
+
+    "puducherry":
+        "Puducherry",
+
+    "pondicherry":
+        "Puducherry"
+
+};
+
+
+function normalizeStateName(
+    value
+) {
+
+    if (!value) {
+
+        return null;
+
+    }
+
+
+    const cleaned =
+        String(value)
+            .trim()
+            .replace(/\s+/g, " ");
+
+
+    const key =
+        cleaned.toLowerCase();
+
+
+    return (
+        CANONICAL_STATES[key]
+        || cleaned
+    );
+
+}
+
+
+/* =========================================================
+   FETCH JSON
+========================================================= */
+
+async function fetchFromBases(
+    bases,
+    path
+) {
+
+    let lastError = null;
+
+
+    for (
+        const base of bases
+    ) {
+
+        const url =
+            base + path;
+
+
+        try {
+
+            console.log(
+                "Trying:",
+                url
+            );
+
+
+            const response =
+                await fetch(url);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            return await response.json();
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Failed:",
+                url,
+                error
+            );
+
+
+            lastError =
+                error;
+
+        }
+
+    }
+
+
+    throw new Error(
+        `Unable to load ${path}. ` +
+        (
+            lastError
+                ? lastError.message
+                : ""
+        )
+    );
+
+}
+
+
+/* =========================================================
+   FIND PROPERTY
+========================================================= */
+
+function findProperty(
+    properties,
+    names
+) {
+
+    if (!properties) {
+
+        return null;
+
+    }
+
+
+    const keys =
+        Object.keys(
+            properties
+        );
+
+
+    for (
+        const wanted of names
+    ) {
+
+        const match =
+            keys.find(
+                key =>
+                    key.toLowerCase()
+                    ===
+                    wanted.toLowerCase()
+            );
+
+
+        if (match) {
+
+            const value =
+                properties[match];
+
+
+            if (
+                value !== null &&
+                value !== undefined &&
+                String(value).trim()
+            ) {
+
+                return value;
+
+            }
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   GET POLYGONS
+========================================================= */
+
+function getPolygons(
+    geometry
+) {
+
+    if (!geometry) {
+
+        return [];
+
+    }
+
+
+    if (
+        geometry.type ===
+        "Polygon"
+    ) {
+
+        return [
+            geometry.coordinates
+        ];
+
+    }
+
+
+    if (
+        geometry.type ===
+        "MultiPolygon"
+    ) {
+
+        return geometry.coordinates;
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =========================================================
+   WEB MERCATOR PROJECTION
+========================================================= */
+
+function project(
+    longitude,
+    latitude
+) {
+
+    const radians =
+        Math.PI / 180;
+
+
+    const lat =
+        Math.max(
+            -85,
+            Math.min(
+                85,
+                latitude
+            )
+        );
+
+
+    return [
+
+        longitude * radians,
+
+        -Math.log(
+            Math.tan(
+                Math.PI / 4 +
+                (lat * radians) / 2
+            )
+        )
+
+    ];
+
+}
+
+
+/* =========================================================
+   BOUNDS
+========================================================= */
+
+function getBounds(
+    features
+) {
+
+    let minX =
+        Infinity;
+
+    let minY =
+        Infinity;
+
+    let maxX =
+        -Infinity;
+
+    let maxY =
+        -Infinity;
+
+
+    for (
+        const feature of features
+    ) {
+
+        const polygons =
+            getPolygons(
+                feature.geometry
+            );
+
+
+        for (
+            const polygon of polygons
+        ) {
+
+            for (
+                const ring of polygon
+            ) {
+
+                for (
+                    const coordinate
+                    of ring
+                ) {
+
+                    const [
+                        x,
+                        y
+                    ] =
+                        project(
+                            coordinate[0],
+                            coordinate[1]
+                        );
+
+
+                    minX =
+                        Math.min(
+                            minX,
+                            x
+                        );
+
+
+                    maxX =
+                        Math.max(
+                            maxX,
+                            x
+                        );
+
+
+                    minY =
+                        Math.min(
+                            minY,
+                            y
+                        );
+
+
+                    maxY =
+                        Math.max(
+                            maxY,
+                            y
+                        );
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    return {
+        minX,
+        minY,
+        maxX,
+        maxY
+    };
+
+}
+
+
+/* =========================================================
+   BUILD SVG PATH
+========================================================= */
+
+function buildPath(
+    geometry,
+    transform
+) {
+
+    const output = [];
+
+
+    const polygons =
+        getPolygons(
+            geometry
+        );
+
+
+    for (
+        const polygon of polygons
+    ) {
+
+        for (
+            const ring of polygon
+        ) {
+
+            let path = "";
+
+
+            for (
+                let i = 0;
+                i < ring.length;
+                i++
+            ) {
+
+                const [
+                    longitude,
+                    latitude
+                ] =
+                    ring[i];
+
+
+                const [
+                    x,
+                    y
+                ] =
+                    transform(
+                        longitude,
+                        latitude
+                    );
+
+
+                path +=
+                    (
+                        path
+                            ? "L"
+                            : "M"
+                    )
+                    +
+                    x.toFixed(2)
+                    +
+                    " "
+                    +
+                    y.toFixed(2);
+
+            }
+
+
+            if (path) {
+
+                output.push(
+                    path + "Z"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    return output.join("");
+
+}
+
+
+/* =========================================================
+   RENDER MAP
+========================================================= */
+
+function renderMap(
+    geojson,
+    level
+) {
+
+    const features =
+        (geojson.features || [])
+        .filter(
+            feature =>
+                getPolygons(
+                    feature.geometry
+                ).length
+        );
+
+
+    if (!features.length) {
+
+        throw new Error(
+            "No map features found."
+        );
+
+    }
+
+
+    const bounds =
+        getBounds(
+            features
+        );
+
+
+    const rangeX =
+        bounds.maxX -
+        bounds.minX;
+
+
+    const rangeY =
+        bounds.maxY -
+        bounds.minY;
+
+
+    const targetWidth =
+        1000;
+
+
+    const scale =
+        targetWidth /
+        rangeX;
+
+
+    const transform =
+        (
+            longitude,
+            latitude
+        ) => {
+
+            const [
+                x,
+                y
+            ] =
+                project(
+                    longitude,
+                    latitude
+                );
+
+
+            return [
+
+                (
+                    x -
+                    bounds.minX
+                ) * scale,
+
+                (
+                    y -
+                    bounds.minY
+                ) * scale
+
+            ];
+
+        };
+
+
+    const width =
+        rangeX * scale;
+
+
+    const height =
+        rangeY * scale;
+
+
+    const padding = 15;
+
+
+    const SVG_NS =
+        "http://www.w3.org/2000/svg";
+
+
+    const svg =
+        document.createElementNS(
+            SVG_NS,
+            "svg"
+        );
+
+
+    svg.setAttribute(
+        "viewBox",
+
+        `${-padding} ${-padding} ` +
+        `${width + padding * 2} ` +
+        `${height + padding * 2}`
+    );
+
+
+    svg.setAttribute(
+        "preserveAspectRatio",
+        "xMidYMid meet"
+    );
+
+
+    svg.setAttribute(
+        "role",
+        "img"
+    );
+
+
+    svg.setAttribute(
+        "aria-label",
+
+        level === "india"
+            ? "Map of India"
+            : "District map"
+    );
+
+
+    for (
+        const feature of features
+    ) {
+
+        const path =
+            document.createElementNS(
+                SVG_NS,
+                "path"
+            );
+
+
+        path.setAttribute(
+            "d",
+
+            buildPath(
+                feature.geometry,
+                transform
+            )
+        );
+
+
+        path.classList.add(
+            "region"
+        );
+
+
+        path.setAttribute(
+            "fill-rule",
+            "evenodd"
+        );
+
+
+        const properties =
+            feature.properties || {};
+
+
+        let name;
+
+
+        if (
+            level === "india"
+        ) {
+
+            name =
+                findProperty(
+                    properties,
+
+                    [
+                        "STATE",
+                        "ST_NM",
+                        "STATE_NAME",
+                        "NAME_1",
+                        "state",
+                        "st_nm",
+                        "State",
+                        "stname",
+                        "STNAME",
+                        "STATE_UT",
+                        "NAME",
+                        "name",
+                        "Name"
+                    ]
+                );
+
+
+            name =
+                normalizeStateName(
+                    name
+                );
+
+        }
+        else {
+
+            name =
+                findProperty(
+                    properties,
+
+                    [
+                        "DISTRICT",
+                        "DT_NAME",
+                        "DIST_NAME",
+                        "NAME_2",
+                        "district",
+                        "dtname",
+                        "DTNAME",
+                        "District",
+                        "dist_name",
+                        "NAME",
+                        "name",
+                        "Name"
+                    ]
+                );
+
+
+            if (!name) {
+
+                name =
+                    "Unknown District";
+
+            }
+
+        }
+
+
+        path.dataset.name =
+            name || "Unknown";
+
+
+        svg.appendChild(
+            path
+        );
+
+    }
+
+
+    mapContainer.innerHTML =
+        "";
+
+
+    mapContainer.className =
+        level === "india"
+            ? "india-map"
+            : "state-map";
+
+
+    mapContainer.appendChild(
+        svg
+    );
+
+
+    return svg;
+
+}
+
+
+/* =========================================================
+   TOOLTIP
+========================================================= */
+
+function showTooltip(
+    text,
+    clientX,
+    clientY
+) {
+
+    tooltip.textContent =
+        text;
+
+
+    tooltip.style.display =
+        "block";
+
+
+    const margin = 14;
+
+
+    const width =
+        tooltip.offsetWidth;
+
+
+    const height =
+        tooltip.offsetHeight;
+
+
+    let x =
+        clientX + margin;
+
+
+    let y =
+        clientY + margin;
+
+
+    if (
+        x + width >
+        window.innerWidth - 5
+    ) {
+
+        x =
+            clientX -
+            width -
+            margin;
+
+    }
+
+
+    if (
+        y + height >
+        window.innerHeight - 5
+    ) {
+
+        y =
+            clientY -
+            height -
+            margin;
+
+    }
+
+
+    tooltip.style.left =
+        Math.max(
+            4,
+            x
+        ) + "px";
+
+
+    tooltip.style.top =
+        Math.max(
+            4,
+            y
+        ) + "px";
+
+}
+
+
+function hideTooltip() {
+
+    tooltip.style.display =
+        "none";
+
+}
+
+
+/* =========================================================
+   REGION FROM EVENT
+========================================================= */
+
+function getRegion(
+    event
+) {
+
+    if (
+        event.target instanceof
+        Element
+    ) {
+
+        return event.target.closest(
+            "path.region"
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+function setupHover(
+    svg
+) {
+
+    svg.addEventListener(
+        "pointerover",
+
+        event => {
+
+            const region =
+                getRegion(
+                    event
+                );
+
+
+            if (!region) {
+
+                return;
+
+            }
+
+
+            showTooltip(
+
+                region.dataset.name,
+
+                event.clientX,
+
+                event.clientY
+
+            );
+
+        }
+    );
+
+
+    svg.addEventListener(
+        "pointermove",
+
+        event => {
+
+            const region =
+                getRegion(
+                    event
+                );
+
+
+            if (!region) {
+
+                hideTooltip();
+
+                return;
+
+            }
+
+
+            showTooltip(
+
+                region.dataset.name,
+
+                event.clientX,
+
+                event.clientY
+
+            );
+
+        }
+    );
+
+
+    svg.addEventListener(
+        "pointerleave",
+
+        hideTooltip
+    );
+
+}
+
+
+/* =========================================================
+   INDIA CLICK
+========================================================= */
+
+function setupIndiaClick(
+    svg
+) {
+
+    svg.addEventListener(
+        "click",
+
+        event => {
+
+            const region =
+                getRegion(
+                    event
+                );
+
+
+            if (!region) {
+
+                return;
+
+            }
+
+
+            const stateName =
+                normalizeStateName(
+                    region.dataset.name
+                );
+
+
+            console.log(
+                "Clicked state:",
+                stateName
+            );
+
+
+            openState(
+                stateName
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD INDIA MAP
+========================================================= */
+
+async function loadIndia() {
+
+    hideTooltip();
+
+
+    backButton.style.display =
+        "none";
+
+
+    titleElement.textContent =
+        "India Map";
+
+
+    subtitleElement.textContent =
+        "Interactive Map";
+
+
+    mapContainer.innerHTML = `
+
+        <div class="status">
+            Loading India map...
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await fetchFromBases(
+                INDIA_BASES,
+                INDIA_FILE
+            );
+
+
+        const svg =
+            renderMap(
+                data,
+                "india"
+            );
+
+
+        setupHover(
+            svg
+        );
+
+
+        setupIndiaClick(
+            svg
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        showError(
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD STATE DISTRICTS
+========================================================= */
+
+async function loadStateDistricts(
+    stateName
+) {
+
+    /*
+        THIS IS THE IMPORTANT FIX.
+
+        The clicked state might be:
+
+            MAHARASHTRA
+
+        but normalizeStateName()
+        converts it to:
+
+            Maharashtra
+    */
+
+    const canonicalName =
+        normalizeStateName(
+            stateName
+        );
+
+
+    const folder =
+        STATE_FOLDER[
+            canonicalName
+        ];
+
+
+    if (!folder) {
+
+        throw new Error(
+            "No district dataset configured for " +
+            canonicalName
+        );
+
+    }
+
+
+    /*
+        Most files follow:
+
+        FOLDER/
+        FOLDER_DISTRICTS.geojson
+    */
+
+
+    let fileName =
+        STATE_FILE_NAME[
+            canonicalName
+        ];
+
+
+    if (!fileName) {
+
+        fileName =
+            folder +
+            "_DISTRICTS.geojson";
+
+    }
+
+
+    const encodedFolder =
+        encodeURIComponent(
+            folder
+        );
+
+
+    const encodedFile =
+        encodeURIComponent(
+            fileName
+        );
+
+
+    const path =
+        encodedFolder +
+        "/" +
+        encodedFile;
+
+
+    console.log(
+        "State:",
+        canonicalName
+    );
+
+
+    console.log(
+        "Folder:",
+        folder
+    );
+
+
+    console.log(
+        "File:",
+        fileName
+    );
+
+
+    console.log(
+        "Path:",
+        path
+    );
+
+
+    return await fetchFromBases(
+        STATE_BASES,
+        path
+    );
+
+}
+
+
+/* =========================================================
+   OPEN STATE
+========================================================= */
+
+async function openState(
+    stateName
+) {
+
+    hideTooltip();
+
+
+    const canonicalName =
+        normalizeStateName(
+            stateName
+        );
+
+
+    titleElement.textContent =
+        canonicalName;
+
+
+    subtitleElement.textContent =
+        "Districts";
+
+
+    backButton.style.display =
+        "block";
+
+
+    mapContainer.innerHTML = `
+
+        <div class="status">
+            Loading ${canonicalName} districts...
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await loadStateDistricts(
+                canonicalName
+            );
+
+
+        const svg =
+            renderMap(
+                data,
+                "state"
+            );
+
+
+        /*
+            IMPORTANT:
+
+            Hover works.
+
+            NO CLICK LISTENER.
+
+            Therefore clicking a district
+            does nothing.
+        */
+
+        setupHover(
+            svg
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        showError(
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(
+    error
+) {
+
+    const message =
+        error?.message ||
+        String(error);
+
+
+    mapContainer.innerHTML = `
+
+        <div class="status">
+
+            <p>
+                Could not load the map.
+            </p>
+
+            <p>
+                ${escapeHTML(message)}
+            </p>
+
+            <button
+                id="retryButton"
+                type="button"
+                style="
+                    margin-top:15px;
+                    padding:8px 18px;
+                    background:white;
+                    border:1px solid #c7d4e1;
+                    border-radius:6px;
+                    cursor:pointer;
+                    font-size:14px;
+                "
+            >
+                Retry
+            </button>
+
+        </div>
+
+    `;
+
+
+    document
+        .getElementById(
+            "retryButton"
+        )
+        ?.addEventListener(
+            "click",
+            loadIndia
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   BACK TO INDIA
+========================================================= */
+
+backButton.addEventListener(
+    "click",
+
+    () => {
+
+        loadIndia();
+
+    }
+
+);
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            backButton.style.display !== "none"
+        ) {
+
+            loadIndia();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadIndia();
+
+</script>
+
+</body>
+
+</html>
