@@ -1,536 +1,1667 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>India Map – Geography for Exam Prep</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>India GK Map</title>
+
 <style>
+
 :root {
-  --bg: #ffffff;
-  --ink: #1d2733;
-  --muted: #6b7785;
-  --region-fill: #e3eaf2;
-  --region-hover: #a9c3de;
-  --region-stroke: #7e8da0;
-  --tip-bg: #1d2733;
-  --tip-ink: #ffffff;
-  --accent: #1f5f99;
+    --bg: #ffffff;
+    --ink: #1d2733;
+    --muted: #6b7785;
+
+    --region-fill: #e3eaf2;
+    --region-hover: #9fc0df;
+    --region-stroke: #6f8195;
+
+    --tooltip-bg: #1d2733;
+    --tooltip-text: #ffffff;
+
+    --accent: #1f5f99;
 }
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+
+* {
+    box-sizing: border-box;
+}
+
+html,
 body {
-  display: flex;
-  flex-direction: column;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0;
 }
 
-/* Header */
-.top { position: relative; padding: 18px 16px 6px; text-align: center; }
-.titles h1 { margin: 0; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 700; letter-spacing: 0.02em; }
-.titles p { margin: 4px 0 0; font-size: 0.95rem; color: var(--muted); }
-.back {
-  position: absolute; left: 16px; top: 18px;
-  padding: 7px 14px; font: inherit; font-size: 0.95rem;
-  color: var(--accent); background: #fff;
-  border: 1px solid #c5d3e2; border-radius: 6px; cursor: pointer;
-}
-.back:hover { background: #f0f5fa; }
-.back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.back[hidden] { display: none; }
+body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
 
-/* Map area */
-#map-root { flex: 1; min-height: 0; padding: 8px 12px 16px; display: flex; align-items: center; justify-content: center; }
-#map-root svg { width: 100%; height: 100%; display: block; }
-.status { color: var(--muted); text-align: center; max-width: 560px; line-height: 1.5; }
+    display: flex;
+    flex-direction: column;
+}
+
+/* ================= HEADER ================= */
+
+header {
+    position: relative;
+    text-align: center;
+    padding: 10px 20px 0;
+    flex-shrink: 0;
+}
+
+h1 {
+    margin: 0;
+
+    font-size: clamp(
+        1.7rem,
+        3vw,
+        2.4rem
+    );
+
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.subtitle {
+    margin-top: 3px;
+
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+/* ================= BACK BUTTON ================= */
+
+#backButton {
+
+    position: absolute;
+
+    left: 18px;
+    top: 14px;
+
+    padding: 7px 14px;
+
+    border: 1px solid #c7d4e1;
+    border-radius: 6px;
+
+    background: white;
+    color: var(--accent);
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    display: none;
+}
+
+#backButton:hover {
+    background: #f1f6fa;
+}
+
+/* ================= MAP ================= */
+
+#mapContainer {
+
+    flex: 1;
+
+    min-height: 0;
+
+    padding: 8px 15px 15px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+#mapContainer svg {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    max-width: 1400px;
+}
+
+/* ================= MAP REGIONS ================= */
 
 .region {
-  fill: var(--region-fill);
-  stroke: var(--region-stroke);
-  stroke-width: 0.8;
-  vector-effect: non-scaling-stroke;
-  stroke-linejoin: round;
-}
-.region:hover { fill: var(--region-hover); }
-.level-india .region { cursor: pointer; }   /* only states are clickable */
-.level-state .region { cursor: default; }
 
-/* Tooltip */
-.tooltip {
-  position: fixed; left: 0; top: 0; z-index: 10;
-  padding: 6px 11px; font-size: 0.95rem; font-weight: 600;
-  color: var(--tip-ink); background: var(--tip-bg);
-  border-radius: 6px; pointer-events: none; white-space: nowrap;
-}
-.tooltip[hidden] { display: none; }
+    fill: var(--region-fill);
 
-@media (max-width: 560px) {
-  .top { padding-top: 56px; }
-  .back { top: 12px; left: 12px; }
+    stroke: var(--region-stroke);
+
+    stroke-width: 0.8;
+
+    vector-effect: non-scaling-stroke;
+
+    stroke-linejoin: round;
+
+    transition:
+        fill 0.12s ease,
+        stroke 0.12s ease;
 }
+
+.region:hover {
+
+    fill: var(--region-hover);
+
+    stroke: #476b8c;
+
+}
+
+.india-map .region {
+
+    cursor: pointer;
+}
+
+.state-map .region {
+
+    cursor: default;
+}
+
+/* ================= TOOLTIP ================= */
+
+#tooltip {
+
+    position: fixed;
+
+    z-index: 1000;
+
+    pointer-events: none;
+
+    padding: 7px 12px;
+
+    background: var(--tooltip-bg);
+
+    color: var(--tooltip-text);
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    display: none;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ================= STATUS ================= */
+
+.status {
+
+    color: var(--muted);
+
+    text-align: center;
+
+    font-size: 16px;
+
+    line-height: 1.5;
+
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding-top: 55px;
+    }
+
+    #backButton {
+
+        top: 12px;
+        left: 12px;
+
+    }
+
+    #mapContainer {
+
+        padding: 5px;
+
+    }
+
+}
+
 </style>
 </head>
+
+
 <body>
 
-<header class="top">
-  <button id="back-btn" class="back" type="button" hidden>← India</button>
-  <div class="titles">
-    <h1 id="title">India Map</h1>
-    <p id="subtitle">Interactive Map</p>
-  </div>
+
+<header>
+
+    <button
+        id="backButton"
+        type="button"
+    >
+        ← India
+    </button>
+
+    <h1 id="title">
+        India Map
+    </h1>
+
+    <div
+        id="subtitle"
+        class="subtitle"
+    >
+        Interactive Map
+    </div>
+
 </header>
 
-<main id="map-root" aria-live="polite">
-  <p class="status">Loading map…</p>
+
+<main id="mapContainer">
+
+    <div class="status">
+        Loading India map...
+    </div>
+
 </main>
 
-<div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+<div id="tooltip"></div>
+
+
 
 <script>
-/* India Map – geography study tool (single file).
- * India level : hover = name, click = open that state.
- * State level : hover = district name, click = nothing.
- *
- * Boundary data (open, MIT licence) is loaded from:
- *   https://github.com/datta07/INDIAN-SHAPEFILES  (INDIA folder)
- * It is downloaded once, simplified, and cached in your browser (IndexedDB).
- */
 
-const DATA_BASE = "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/INDIA/";
-const STATES_URL = DATA_BASE + "INDIA_STATES.geojson";
-const DISTRICTS_URL = DATA_BASE + "INDIA_DISTRICTS.geojson";
-const CACHE_VERSION = "v1";
-const STATE_TOLERANCE = 0.004;      // degrees – smaller = more detail
-const DISTRICT_TOLERANCE = 0.0015;
+/*
+===========================================================
+INDIA GK MAP
+===========================================================
 
-const root = document.getElementById("map-root");
-const tooltip = document.getElementById("tooltip");
-const backBtn = document.getElementById("back-btn");
-const titleEl = document.getElementById("title");
-const subtitleEl = document.getElementById("subtitle");
+India level:
 
-/* ================= Names ================= */
+    Hover state  -> show state name
+    Click state  -> open state district map
 
-const CANONICAL = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa",
-  "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala",
-  "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland",
-  "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
-  "Uttar Pradesh", "Uttarakhand", "West Bengal",
-  "Andaman and Nicobar Islands", "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir",
-  "Ladakh", "Lakshadweep", "Puducherry"
+State level:
+
+    Hover district -> show district name
+    Click district -> NOTHING
+
+===========================================================
+*/
+
+
+/* ========================================================
+   DATA SOURCE
+======================================================== */
+
+const DATA_BASES = [
+
+    "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/INDIA/",
+
+    "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/INDIA/",
+
+    "https://rawcdn.githack.com/datta07/INDIAN-SHAPEFILES/master/INDIA/"
+
 ];
-const DNHDD = "Dadra and Nagar Haveli and Daman and Diu";
 
-const ALIASES = {
-  orissa: "Odisha", uttaranchal: "Uttarakhand", telengana: "Telangana",
-  nctofdelhi: "Delhi", pondicherry: "Puducherry",
-  jammukashmir: "Jammu and Kashmir",
-  andamanandnicobar: "Andaman and Nicobar Islands",
-  andamannicobarislands: "Andaman and Nicobar Islands",
-  dadraandnagarhaveli: DNHDD, dadaraandnagarhavelli: DNHDD, dadaraandnagarhaveli: DNHDD,
-  damananddiu: DNHDD, daman: DNHDD, diu: DNHDD,
-  dadraandnagarhavelianddamananddiu: DNHDD, dnhdd: DNHDD
+
+const INDIA_FILE =
+    "INDIA_STATES.geojson";
+
+
+/* ========================================================
+   STATE FOLDER / FILE MAPPING
+========================================================
+
+   IMPORTANT:
+
+   We load the district file belonging to the
+   selected state directly.
+
+   Therefore we don't need to read the
+   state property from the giant INDIA_DISTRICTS file.
+======================================================== */
+
+
+const STATE_FILES = {
+
+    "Andhra Pradesh":
+        "ANDHRA_PRADESH",
+
+    "Arunachal Pradesh":
+        "ARUNACHAL_PRADESH",
+
+    "Assam":
+        "ASSAM",
+
+    "Bihar":
+        "BIHAR",
+
+    "Chhattisgarh":
+        "CHHATTISGARH",
+
+    "Goa":
+        "GOA",
+
+    "Gujarat":
+        "GUJARAT",
+
+    "Haryana":
+        "HARYANA",
+
+    "Himachal Pradesh":
+        "HIMACHAL_PRADESH",
+
+    "Jharkhand":
+        "JHARKHAND",
+
+    "Karnataka":
+        "KARNATAKA",
+
+    "Kerala":
+        "KERALA",
+
+    "Madhya Pradesh":
+        "MADHYA_PRADESH",
+
+    "Maharashtra":
+        "MAHARASHTRA",
+
+    "Manipur":
+        "MANIPUR",
+
+    "Meghalaya":
+        "MEGHALAYA",
+
+    "Mizoram":
+        "MIZORAM",
+
+    "Nagaland":
+        "NAGALAND",
+
+    "Odisha":
+        "ODISHA",
+
+    "Punjab":
+        "PUNJAB",
+
+    "Rajasthan":
+        "RAJASTHAN",
+
+    "Sikkim":
+        "SIKKIM",
+
+    "Tamil Nadu":
+        "TAMIL_NADU",
+
+    "Telangana":
+        "TELANGANA",
+
+    "Tripura":
+        "TRIPURA",
+
+    "Uttar Pradesh":
+        "UTTAR_PRADESH",
+
+    "Uttarakhand":
+        "UTTARAKHAND",
+
+    "West Bengal":
+        "WEST_BENGAL",
+
+    "Andaman and Nicobar Islands":
+        "ANDAMAN_AND_NICOBAR_ISLANDS",
+
+    "Chandigarh":
+        "CHANDIGARH",
+
+    "Dadra and Nagar Haveli and Daman and Diu":
+        "DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU",
+
+    "Delhi":
+        "DELHI",
+
+    "Jammu and Kashmir":
+        "JAMMU_AND_KASHMIR",
+
+    "Ladakh":
+        "LADAKH",
+
+    "Lakshadweep":
+        "LAKSHADWEEP",
+
+    "Puducherry":
+        "PUDUCHERRY"
+
 };
 
-const STATE_KEYS = ["STATE", "ST_NM", "STATE_NAME", "NAME_1", "state", "st_nm", "State", "stname", "STNAME", "STATE_UT"];
-const STATE_NAME_KEYS = STATE_KEYS.concat(["NAME", "name", "Name"]);
-const DISTRICT_KEYS = ["DISTRICT", "DT_NAME", "DIST_NAME", "NAME_2", "district", "dtname", "DTNAME", "District", "dist_name", "NAME"];
 
-const normKey = s => String(s).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
-const CANON_BY_NORM = Object.fromEntries(CANONICAL.map(n => [normKey(n), n]));
-const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+/* ========================================================
+   DOM ELEMENTS
+======================================================== */
 
-function canonicalState(raw) {
-  const k = normKey(raw);
-  return CANON_BY_NORM[k] || ALIASES[k] || null;
-}
+const mapContainer =
+    document.getElementById("mapContainer");
 
-function pickKey(props, candidates) {
-  for (const k of candidates) {
-    if (props && props[k] !== undefined && props[k] !== null && props[k] !== "") return k;
-  }
-  return null;
-}
+const tooltip =
+    document.getElementById("tooltip");
 
-function titleCase(s) {
-  return String(s).trim().toLowerCase().replace(/(^|[\s(\-/])([a-z])/g, (m, a, b) => a + b.toUpperCase());
-}
+const titleElement =
+    document.getElementById("title");
 
-/* ================= Geometry helpers ================= */
+const subtitleElement =
+    document.getElementById("subtitle");
 
-function polygonsOf(geometry) {
-  if (!geometry) return [];
-  if (geometry.type === "Polygon") return [geometry.coordinates];
-  if (geometry.type === "MultiPolygon") return geometry.coordinates;
-  return [];
-}
+const backButton =
+    document.getElementById("backButton");
 
-function perpDist(p, a, b) {
-  const dx = b[0] - a[0], dy = b[1] - a[1];
-  if (dx === 0 && dy === 0) return Math.hypot(p[0] - a[0], p[1] - a[1]);
-  const t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / (dx * dx + dy * dy)));
-  return Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy));
-}
 
-// Iterative Douglas-Peucker
-function simplifyRing(points, tol) {
-  const n = points.length;
-  if (n <= 4 || tol <= 0) return points;
-  const keep = new Uint8Array(n);
-  keep[0] = keep[n - 1] = 1;
-  const stack = [[0, n - 1]];
-  while (stack.length) {
-    const [s, e] = stack.pop();
-    let dmax = 0, idx = -1;
-    for (let i = s + 1; i < e; i++) {
-      const d = perpDist(points[i], points[s], points[e]);
-      if (d > dmax) { dmax = d; idx = i; }
+/* ========================================================
+   STATE NAME NORMALIZATION
+======================================================== */
+
+const ALIASES = {
+
+    "Orissa":
+        "Odisha",
+
+    "Uttaranchal":
+        "Uttarakhand",
+
+    "Telengana":
+        "Telangana",
+
+    "NCT of Delhi":
+        "Delhi",
+
+    "Pondicherry":
+        "Puducherry"
+
+};
+
+
+function normalizeStateName(name) {
+
+    if (!name) return null;
+
+    const value =
+        String(name).trim();
+
+    if (ALIASES[value]) {
+
+        return ALIASES[value];
+
     }
-    if (idx !== -1 && dmax > tol) {
-      keep[idx] = 1;
-      stack.push([s, idx], [idx, e]);
+
+    return value;
+
+}
+
+
+/* ========================================================
+   FETCH JSON
+======================================================== */
+
+async function fetchJSON(fileName) {
+
+    let lastError = null;
+
+
+    for (const base of DATA_BASES) {
+
+        try {
+
+            const url =
+                base + fileName;
+
+            const response =
+                await fetch(url);
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "HTTP " + response.status
+                );
+
+            }
+
+            return await response.json();
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Failed:",
+                fileName,
+                error
+            );
+
+            lastError = error;
+
+        }
+
     }
-  }
-  const out = points.filter((_, i) => keep[i]);
-  return out.length >= 4 ? out : points;
+
+
+    throw new Error(
+        "Could not load " +
+        fileName +
+        ". " +
+        (lastError?.message || "")
+    );
+
 }
 
-function cleanPolygons(geometry, tol) {
-  const result = [];
-  for (const poly of polygonsOf(geometry)) {
-    const rings = [];
-    for (let i = 0; i < poly.length; i++) {
-      const pts = poly[i].map(c => [Math.round(c[0] * 1e4) / 1e4, Math.round(c[1] * 1e4) / 1e4]);
-      const simple = simplifyRing(pts, tol);
-      if (simple.length >= 4) rings.push(simple);
-      else if (i === 0) break;           // outer ring too small -> drop polygon
+
+/* ========================================================
+   PROPERTY FINDER
+========================================================
+
+   This is deliberately case-insensitive.
+
+   So:
+
+       state
+       STATE
+       State
+       district
+       DISTRICT
+
+   will all work.
+======================================================== */
+
+function findProperty(properties, possibleNames) {
+
+    if (!properties) return null;
+
+
+    const actualKeys =
+        Object.keys(properties);
+
+
+    for (const wanted of possibleNames) {
+
+        const found =
+            actualKeys.find(
+                key =>
+                    key.toLowerCase() ===
+                    wanted.toLowerCase()
+            );
+
+
+        if (found) {
+
+            const value =
+                properties[found];
+
+            if (
+                value !== null &&
+                value !== undefined &&
+                String(value).trim() !== ""
+            ) {
+
+                return value;
+
+            }
+
+        }
+
     }
-    if (rings.length) result.push(rings);
-  }
-  return result;
+
+
+    return null;
+
 }
 
-function toGeometry(polys) {
-  return polys.length === 1
-    ? { type: "Polygon", coordinates: polys[0] }
-    : { type: "MultiPolygon", coordinates: polys };
+
+/* ========================================================
+   GEOMETRY
+======================================================== */
+
+function getPolygons(geometry) {
+
+    if (!geometry)
+        return [];
+
+    if (geometry.type === "Polygon")
+        return [geometry.coordinates];
+
+    if (geometry.type === "MultiPolygon")
+        return geometry.coordinates;
+
+    return [];
+
 }
 
-/* ================= Data loading & processing ================= */
 
-function showStatus(message) {
-  root.className = "";
-  root.innerHTML = "";
-  const p = document.createElement("p");
-  p.className = "status";
-  p.textContent = message;
-  root.appendChild(p);
-}
+/* ========================================================
+   PROJECTION
+======================================================== */
 
-function showError(err) {
-  console.error(err);
-  showStatus("Could not load the map. Check your internet connection and reload. (" + err.message + ")");
-}
-
-async function fetchJSON(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Download failed: ${res.status} ${url}`);
-  return res.json();
-}
-
-/* Small IndexedDB cache so large files are downloaded only once. Fails silently. */
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open("india-map-gk", 1);
-    req.onupgradeneeded = () => req.result.createObjectStore("kv");
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-async function cacheGet(key) {
-  try {
-    const db = await openDB();
-    return await new Promise(resolve => {
-      const r = db.transaction("kv").objectStore("kv").get(CACHE_VERSION + ":" + key);
-      r.onsuccess = () => resolve(r.result || null);
-      r.onerror = () => resolve(null);
-    });
-  } catch (e) { return null; }
-}
-async function cacheSet(key, value) {
-  try {
-    const db = await openDB();
-    await new Promise(resolve => {
-      const tx = db.transaction("kv", "readwrite");
-      tx.objectStore("kv").put(value, CACHE_VERSION + ":" + key);
-      tx.oncomplete = tx.onerror = tx.onabort = () => resolve();
-    });
-  } catch (e) { /* ignore */ }
-}
-
-/* ---- India (states) ---- */
-let indiaPromise = null;
-
-function loadIndiaData() {
-  if (!indiaPromise) {
-    indiaPromise = (async () => {
-      const cached = await cacheGet("india");
-      if (cached) return cached;
-
-      const fc = await fetchJSON(STATES_URL);
-      const grouped = new Map();
-      for (const f of fc.features) {
-        const key = pickKey(f.properties, STATE_NAME_KEYS);
-        if (!key) throw new Error("No state-name property found: " + Object.keys(f.properties || {}).join(", "));
-        const name = canonicalState(f.properties[key]);
-        if (!name) { console.warn("Unrecognised state in data:", f.properties[key]); continue; }
-        if (!grouped.has(name)) grouped.set(name, []);
-        grouped.get(name).push(...cleanPolygons(f.geometry, STATE_TOLERANCE));
-      }
-      const features = [];
-      for (const name of CANONICAL) {
-        const polys = grouped.get(name);
-        if (!polys || !polys.length) { console.warn("No geometry for", name); continue; }
-        features.push({
-          type: "Feature",
-          properties: { id: slugify(name), name },
-          geometry: toGeometry(polys)
-        });
-      }
-      const result = { type: "FeatureCollection", features };
-      cacheSet("india", result);
-      return result;
-    })().catch(err => { indiaPromise = null; throw err; });
-  }
-  return indiaPromise;
-}
-
-/* ---- Districts (one big file, split by state, cached per state) ---- */
-let districtsPromise = null;
-
-function loadDistrictsFile() {
-  if (!districtsPromise) {
-    districtsPromise = fetchJSON(DISTRICTS_URL).then(fc => {
-      const byState = new Map();
-      for (const f of fc.features) {
-        const props = f.properties || {};
-        const sKey = pickKey(props, STATE_KEYS);
-        const dKey = pickKey(props, DISTRICT_KEYS);
-        if (!sKey || !dKey) throw new Error("No state/district property found: " + Object.keys(props).join(", "));
-        const state = canonicalState(props[sKey]);
-        if (!state) { console.warn("Unrecognised state for district:", props[sKey], props[dKey]); continue; }
-        if (!byState.has(state)) byState.set(state, []);
-        byState.get(state).push({ name: titleCase(props[dKey]), geometry: f.geometry });
-      }
-      return byState;
-    }).catch(err => { districtsPromise = null; throw err; });
-  }
-  return districtsPromise;
-}
-
-async function loadStateData(stateName) {
-  const key = "state:" + slugify(stateName);
-  const cached = await cacheGet(key);
-  if (cached) return cached;
-
-  showStatus("Downloading district data (large file, first time only)…");
-  const byState = await loadDistrictsFile();
-  const items = byState.get(stateName);
-  if (!items || !items.length) throw new Error("No districts found for " + stateName);
-
-  const seen = {};
-  const features = items
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map(it => {
-      const polys = cleanPolygons(it.geometry, DISTRICT_TOLERANCE);
-      const base = slugify(stateName) + "-" + slugify(it.name);
-      seen[base] = (seen[base] || 0) + 1;
-      return {
-        type: "Feature",
-        properties: { id: seen[base] === 1 ? base : base + "-" + seen[base], name: it.name },
-        geometry: toGeometry(polys)
-      };
-    })
-    .filter(f => polygonsOf(f.geometry).length);
-
-  const result = { type: "FeatureCollection", features };
-  cacheSet(key, result);
-  return result;
-}
-
-/* ================= Projection & drawing ================= */
-
-// Web-Mercator style projection.
 function project(lon, lat) {
-  const rad = Math.PI / 180;
-  const clamped = Math.max(-85, Math.min(85, lat));
-  return [lon * rad, -Math.log(Math.tan(Math.PI / 4 + (clamped * rad) / 2))];
+
+    const rad =
+        Math.PI / 180;
+
+    const safeLat =
+        Math.max(
+            -85,
+            Math.min(85, lat)
+        );
+
+    return [
+
+        lon * rad,
+
+        -Math.log(
+            Math.tan(
+                Math.PI / 4 +
+                (safeLat * rad) / 2
+            )
+        )
+
+    ];
+
 }
 
-function computeBounds(features) {
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  for (const f of features) {
-    for (const poly of polygonsOf(f.geometry)) {
-      for (const [lon, lat] of poly[0]) {
-        const [x, y] = project(lon, lat);
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y < minY) minY = y;
-        if (y > maxY) maxY = y;
-      }
+
+/* ========================================================
+   CALCULATE MAP BOUNDS
+======================================================== */
+
+function calculateBounds(features) {
+
+    let minX = Infinity;
+    let minY = Infinity;
+
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+
+    for (const feature of features) {
+
+        const polygons =
+            getPolygons(
+                feature.geometry
+            );
+
+
+        for (const polygon of polygons) {
+
+            for (const ring of polygon) {
+
+                for (const coordinate of ring) {
+
+                    const lon =
+                        coordinate[0];
+
+                    const lat =
+                        coordinate[1];
+
+
+                    const [x, y] =
+                        project(
+                            lon,
+                            lat
+                        );
+
+
+                    minX =
+                        Math.min(minX, x);
+
+                    maxX =
+                        Math.max(maxX, x);
+
+                    minY =
+                        Math.min(minY, y);
+
+                    maxY =
+                        Math.max(maxY, y);
+
+                }
+
+            }
+
+        }
+
     }
-  }
-  return { minX, minY, maxX, maxY };
+
+
+    return {
+        minX,
+        minY,
+        maxX,
+        maxY
+    };
+
 }
 
-function buildPathData(geometry, tx) {
-  const parts = [];
-  for (const poly of polygonsOf(geometry)) {
-    for (const ring of poly) {
-      let d = "", lastX = null, lastY = null;
-      for (let i = 0; i < ring.length; i++) {
-        const [x, y] = tx(ring[i][0], ring[i][1]);
-        if (lastX !== null && Math.abs(x - lastX) < 0.15 && Math.abs(y - lastY) < 0.15) continue;
-        d += (d ? "L" : "M") + x.toFixed(2) + " " + y.toFixed(2);
-        lastX = x; lastY = y;
-      }
-      if (d) parts.push(d + "Z");
+
+/* ========================================================
+   BUILD SVG PATH
+======================================================== */
+
+function buildPath(
+    geometry,
+    transform
+) {
+
+    const parts = [];
+
+
+    const polygons =
+        getPolygons(geometry);
+
+
+    for (const polygon of polygons) {
+
+        for (const ring of polygon) {
+
+            let path = "";
+
+
+            for (
+                let i = 0;
+                i < ring.length;
+                i++
+            ) {
+
+                const [
+                    lon,
+                    lat
+                ] = ring[i];
+
+
+                const [
+                    x,
+                    y
+                ] = transform(
+                    lon,
+                    lat
+                );
+
+
+                path +=
+                    (path ? "L" : "M") +
+                    x.toFixed(2) +
+                    " " +
+                    y.toFixed(2);
+
+            }
+
+
+            if (path) {
+
+                parts.push(
+                    path + "Z"
+                );
+
+            }
+
+        }
+
     }
-  }
-  return parts.join("");
+
+
+    return parts.join("");
+
 }
 
-function renderMap(geojson, level) {
-  const features = geojson.features.filter(f => polygonsOf(f.geometry).length);
-  const b = computeBounds(features);
-  const scale = 1000 / (b.maxX - b.minX);
-  const tx = (lon, lat) => {
-    const [x, y] = project(lon, lat);
-    return [(x - b.minX) * scale, (y - b.minY) * scale];
-  };
-  const width = (b.maxX - b.minX) * scale;
-  const height = (b.maxY - b.minY) * scale;
-  const pad = 15;
 
-  const NS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(NS, "svg");
-  svg.setAttribute("viewBox", `${-pad} ${-pad} ${width + pad * 2} ${height + pad * 2}`);
-  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-  svg.setAttribute("role", "img");
-  svg.setAttribute("aria-label", level === "india" ? "Map of India" : "District map");
+/* ========================================================
+   RENDER MAP
+======================================================== */
 
-  for (const f of features) {
-    const path = document.createElementNS(NS, "path");
-    path.setAttribute("d", buildPathData(f.geometry, tx));
-    path.setAttribute("class", "region");
-    path.setAttribute("fill-rule", "evenodd");
-    path.dataset.id = f.properties.id;
-    path.dataset.name = f.properties.name;
-    svg.appendChild(path);
-  }
+function renderMap(
+    geojson,
+    level
+) {
 
-  root.className = "level-" + level;
-  root.innerHTML = "";
-  root.appendChild(svg);
-  return svg;
+    const features =
+        (geojson.features || [])
+        .filter(
+            feature =>
+                getPolygons(
+                    feature.geometry
+                ).length > 0
+        );
+
+
+    if (!features.length) {
+
+        throw new Error(
+            "No geographic features found."
+        );
+
+    }
+
+
+    const bounds =
+        calculateBounds(features);
+
+
+    const mapWidth = 1000;
+
+
+    const rangeX =
+        bounds.maxX -
+        bounds.minX;
+
+
+    const rangeY =
+        bounds.maxY -
+        bounds.minY;
+
+
+    const scale =
+        mapWidth /
+        rangeX;
+
+
+    const transform =
+        (lon, lat) => {
+
+            const [x, y] =
+                project(
+                    lon,
+                    lat
+                );
+
+
+            return [
+
+                (x - bounds.minX) *
+                    scale,
+
+                (y - bounds.minY) *
+                    scale
+
+            ];
+
+        };
+
+
+    const width =
+        rangeX * scale;
+
+
+    const height =
+        rangeY * scale;
+
+
+    const padding = 15;
+
+
+    const SVG_NS =
+        "http://www.w3.org/2000/svg";
+
+
+    const svg =
+        document.createElementNS(
+            SVG_NS,
+            "svg"
+        );
+
+
+    svg.setAttribute(
+        "viewBox",
+
+        `${-padding} ${-padding} ` +
+        `${width + padding * 2} ` +
+        `${height + padding * 2}`
+    );
+
+
+    svg.setAttribute(
+        "preserveAspectRatio",
+        "xMidYMid meet"
+    );
+
+
+    svg.setAttribute(
+        "aria-label",
+
+        level === "india"
+            ? "Map of India"
+            : "District map"
+    );
+
+
+    for (const feature of features) {
+
+        const path =
+            document.createElementNS(
+                SVG_NS,
+                "path"
+            );
+
+
+        path.setAttribute(
+            "d",
+
+            buildPath(
+                feature.geometry,
+                transform
+            )
+        );
+
+
+        path.classList.add(
+            "region"
+        );
+
+
+        const properties =
+            feature.properties || {};
+
+
+        let name;
+
+
+        if (level === "india") {
+
+            name =
+                findProperty(
+                    properties,
+
+                    [
+                        "STATE",
+                        "ST_NM",
+                        "STATE_NAME",
+                        "NAME_1",
+                        "state",
+                        "st_nm",
+                        "State",
+                        "stname",
+                        "STNAME",
+                        "STATE_UT",
+                        "NAME",
+                        "name",
+                        "Name"
+                    ]
+                );
+
+        }
+        else {
+
+            name =
+                findProperty(
+                    properties,
+
+                    [
+                        "DISTRICT",
+                        "DT_NAME",
+                        "DIST_NAME",
+                        "NAME_2",
+                        "district",
+                        "dtname",
+                        "DTNAME",
+                        "District",
+                        "dist_name",
+                        "NAME",
+                        "name",
+                        "Name"
+                    ]
+                );
+
+        }
+
+
+        if (!name) {
+
+            name =
+                level === "india"
+                    ? "Unknown State"
+                    : "Unknown District";
+
+        }
+
+
+        name =
+            normalizeStateName(name);
+
+
+        path.dataset.name =
+            name;
+
+
+        path.setAttribute(
+            "fill-rule",
+            "evenodd"
+        );
+
+
+        svg.appendChild(path);
+
+    }
+
+
+    mapContainer.innerHTML = "";
+
+
+    mapContainer.className =
+        level === "india"
+            ? "india-map"
+            : "state-map";
+
+
+    mapContainer.appendChild(svg);
+
+
+    return svg;
+
 }
 
-/* ================= Tooltip ================= */
 
-function showTooltip(text, clientX, clientY) {
-  tooltip.textContent = text;
-  tooltip.hidden = false;
-  const margin = 14;
-  const w = tooltip.offsetWidth, h = tooltip.offsetHeight;
-  let x = clientX + margin, y = clientY + margin;
-  if (x + w > window.innerWidth - 4) x = clientX - w - margin;
-  if (y + h > window.innerHeight - 4) y = clientY - h - margin;
-  tooltip.style.transform = `translate(${Math.max(4, x)}px, ${Math.max(4, y)}px)`;
+/* ========================================================
+   TOOLTIP
+======================================================== */
+
+function showTooltip(
+    text,
+    x,
+    y
+) {
+
+    tooltip.textContent =
+        text;
+
+
+    tooltip.style.display =
+        "block";
+
+
+    const margin = 14;
+
+
+    const width =
+        tooltip.offsetWidth;
+
+
+    const height =
+        tooltip.offsetHeight;
+
+
+    let left =
+        x + margin;
+
+
+    let top =
+        y + margin;
+
+
+    if (
+        left + width >
+        window.innerWidth - 5
+    ) {
+
+        left =
+            x -
+            width -
+            margin;
+
+    }
+
+
+    if (
+        top + height >
+        window.innerHeight - 5
+    ) {
+
+        top =
+            y -
+            height -
+            margin;
+
+    }
+
+
+    tooltip.style.left =
+        Math.max(
+            4,
+            left
+        ) + "px";
+
+
+    tooltip.style.top =
+        Math.max(
+            4,
+            top
+        ) + "px";
+
 }
+
 
 function hideTooltip() {
-  tooltip.hidden = true;
+
+    tooltip.style.display =
+        "none";
+
 }
 
-/* ================= Interaction (event delegation) ================= */
 
-function regionFromEvent(e) {
-  return e.target instanceof Element ? e.target.closest("path.region") : null;
+/* ========================================================
+   FIND REGION FROM EVENT
+======================================================== */
+
+function getRegionFromEvent(event) {
+
+    if (
+        event.target instanceof
+        Element
+    ) {
+
+        return event.target.closest(
+            "path.region"
+        );
+
+    }
+
+
+    return null;
+
 }
 
-// Hover/touch -> name. Used on both the India map and the state maps.
-function setupStateHover(svg) {
-  svg.addEventListener("pointerover", e => {
-    const r = regionFromEvent(e);
-    if (r) showTooltip(r.dataset.name, e.clientX, e.clientY);
-  });
-  svg.addEventListener("pointermove", e => {
-    const r = regionFromEvent(e);
-    if (r) showTooltip(r.dataset.name, e.clientX, e.clientY);
-    else hideTooltip();
-  });
-  svg.addEventListener("pointerleave", hideTooltip);
-  svg.addEventListener("pointerdown", e => {
-    const r = regionFromEvent(e);
-    if (r) showTooltip(r.dataset.name, e.clientX, e.clientY);
-  });
+
+/* ========================================================
+   HOVER EVENTS
+======================================================== */
+
+function setupHover(svg) {
+
+    svg.addEventListener(
+        "pointerover",
+
+        event => {
+
+            const region =
+                getRegionFromEvent(
+                    event
+                );
+
+
+            if (!region)
+                return;
+
+
+            showTooltip(
+
+                region.dataset.name,
+
+                event.clientX,
+
+                event.clientY
+
+            );
+
+        }
+    );
+
+
+    svg.addEventListener(
+        "pointermove",
+
+        event => {
+
+            const region =
+                getRegionFromEvent(
+                    event
+                );
+
+
+            if (!region) {
+
+                hideTooltip();
+
+                return;
+
+            }
+
+
+            showTooltip(
+
+                region.dataset.name,
+
+                event.clientX,
+
+                event.clientY
+
+            );
+
+        }
+    );
+
+
+    svg.addEventListener(
+        "pointerleave",
+
+        hideTooltip
+    );
+
 }
 
-// Only called for the India map. District maps never get a click handler.
-function setupStateClick(svg) {
-  svg.addEventListener("click", e => {
-    const r = regionFromEvent(e);
-    if (r) loadStateMap({ id: r.dataset.id, name: r.dataset.name });
-  });
+
+/* ========================================================
+   INDIA CLICK
+======================================================== */
+
+function setupIndiaClick(svg) {
+
+    svg.addEventListener(
+        "click",
+
+        event => {
+
+            const region =
+                getRegionFromEvent(
+                    event
+                );
+
+
+            if (!region)
+                return;
+
+
+            const stateName =
+                region.dataset.name;
+
+
+            openState(
+                stateName
+            );
+
+        }
+    );
+
 }
 
-/* ================= Screens ================= */
 
-async function loadIndiaMap() {
-  hideTooltip();
-  backBtn.hidden = true;
-  titleEl.textContent = "India Map";
-  subtitleEl.textContent = "Interactive Map";
-  try {
-    showStatus("Loading map…");
-    const data = await loadIndiaData();
-    const svg = renderMap(data, "india");
-    setupStateHover(svg);
-    setupStateClick(svg);
-  } catch (err) {
-    showError(err);
-  }
+/* ========================================================
+   LOAD INDIA
+======================================================== */
+
+async function loadIndia() {
+
+    hideTooltip();
+
+
+    backButton.style.display =
+        "none";
+
+
+    titleElement.textContent =
+        "India Map";
+
+
+    subtitleElement.textContent =
+        "Interactive Map";
+
+
+    mapContainer.innerHTML = `
+
+        <div class="status">
+            Loading India map...
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await fetchJSON(
+                INDIA_FILE
+            );
+
+
+        const svg =
+            renderMap(
+                data,
+                "india"
+            );
+
+
+        setupHover(svg);
+
+        setupIndiaClick(svg);
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        showError(
+            error.message
+        );
+
+    }
+
 }
 
-async function loadStateMap(state) {
-  hideTooltip();
-  backBtn.hidden = false;
-  titleEl.textContent = state.name;
-  subtitleEl.textContent = "Districts";
-  try {
-    showStatus("Loading map…");
-    const data = await loadStateData(state.name);
-    const svg = renderMap(data, "state");
-    setupStateHover(svg);            // hover only – no click handler
-  } catch (err) {
-    showError(err);
-  }
+
+/* ========================================================
+   LOAD STATE DISTRICTS
+======================================================== */
+
+async function loadStateDistricts(
+    stateName
+) {
+
+    const folder =
+        STATE_FILES[stateName];
+
+
+    if (!folder) {
+
+        throw new Error(
+            "District data is not configured for " +
+            stateName
+        );
+
+    }
+
+
+    /*
+        Example:
+
+        Rajasthan
+
+        STATES/RAJASTHAN/
+        RAJASTHAN_DISTRICTS.geojson
+    */
+
+
+    const fileName =
+        `../STATES/${folder}/${folder}_DISTRICTS.geojson`;
+
+
+    /*
+        We cannot use the INDIA base here because
+        the state files are located in the STATES folder.
+
+        Try the GitHub raw repository directly.
+    */
+
+
+    const stateBases = [
+
+        "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/STATES/",
+
+        "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/STATES/",
+
+        "https://rawcdn.githack.com/datta07/INDIAN-SHAPEFILES/master/STATES/"
+
+    ];
+
+
+    let lastError;
+
+
+    for (
+        const base of stateBases
+    ) {
+
+        try {
+
+            const url =
+                base +
+                folder +
+                "/" +
+                folder +
+                "_DISTRICTS.geojson";
+
+
+            console.log(
+                "Loading:",
+                url
+            );
+
+
+            const response =
+                await fetch(url);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
+
+            }
+
+
+            return await response.json();
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Failed:",
+                error
+            );
+
+            lastError =
+                error;
+
+        }
+
+    }
+
+
+    throw new Error(
+        "Could not load district map for " +
+        stateName +
+        ". " +
+        (lastError?.message || "")
+    );
+
 }
 
-function resetToIndia() {
-  loadIndiaMap();
+
+/* ========================================================
+   OPEN STATE
+======================================================== */
+
+async function openState(
+    stateName
+) {
+
+    hideTooltip();
+
+
+    backButton.style.display =
+        "block";
+
+
+    titleElement.textContent =
+        stateName;
+
+
+    subtitleElement.textContent =
+        "Districts";
+
+
+    mapContainer.innerHTML = `
+
+        <div class="status">
+            Loading ${stateName} districts...
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await loadStateDistricts(
+                stateName
+            );
+
+
+        const svg =
+            renderMap(
+                data,
+                "state"
+            );
+
+
+        /*
+            IMPORTANT:
+
+            We only attach hover.
+
+            There is NO click event
+            for districts.
+
+            Therefore clicking a district
+            does absolutely nothing.
+        */
+
+        setupHover(svg);
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        showError(
+            error.message
+        );
+
+    }
+
 }
 
-backBtn.addEventListener("click", resetToIndia);
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && !backBtn.hidden) resetToIndia();
-});
 
-loadIndiaMap();
+/* ========================================================
+   ERROR DISPLAY
+======================================================== */
+
+function showError(
+    message
+) {
+
+    mapContainer.innerHTML = `
+
+        <div class="status">
+
+            <p>
+                Could not load the map.
+            </p>
+
+            <p>
+                ${escapeHTML(message)}
+            </p>
+
+            <button
+                onclick="loadIndia()"
+                style="
+                    margin-top:15px;
+                    padding:8px 16px;
+                    border:1px solid #c7d4e1;
+                    border-radius:6px;
+                    background:white;
+                    cursor:pointer;
+                "
+            >
+                Retry
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ========================================================
+   HTML ESCAPE
+======================================================== */
+
+function escapeHTML(
+    value
+) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ========================================================
+   BACK TO INDIA
+======================================================== */
+
+backButton.addEventListener(
+    "click",
+
+    () => {
+
+        loadIndia();
+
+    }
+);
+
+
+/* ESC KEY */
+
+document.addEventListener(
+    "keydown",
+
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            backButton.style.display !== "none"
+        ) {
+
+            loadIndia();
+
+        }
+
+    }
+);
+
+
+/* ========================================================
+   START
+======================================================== */
+
+loadIndia();
+
 </script>
+
 </body>
 </html>
