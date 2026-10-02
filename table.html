@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiplication Study Table</title>
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Georgia,"Times New Roman",serif;
+    background:#f4f1e8;
+    color:#292b2d;
+}
+header{
+    height:72px;
+    background:#263238;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
+.brand{font-size:25px;letter-spacing:.5px}
+.nav{display:flex;gap:10px}
+.nav button{
+    border:1px solid #9c8a6a;
+    background:transparent;
+    color:#fff;
+    padding:10px 20px;
+    font:16px Georgia,serif;
+    cursor:pointer;
+}
+.nav button.active,.nav button:hover{background:#9c8a6a}
+main{max-width:1400px;margin:auto;padding:28px}
+.page-title{text-align:center;margin:8px 0 24px}
+.page-title h1{font-size:34px;font-weight:normal;margin:0 0 7px}
+.page-title p{color:#756f65;margin:0}
+.table-wrap{
+    overflow:auto;
+    background:#fffdf7;
+    border:1px solid #d2cbbb;
+    box-shadow:0 8px 25px rgba(60,50,30,.09);
+}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{
+    border:1px solid #d8d1c2;
+    text-align:center;
+    padding:10px 7px;
+    font-size:15px;
+}
+thead th{background:#263238;color:#fff;font-weight:normal}
+tbody th{background:#eee8da;font-weight:bold}
+tbody tr:nth-child(even) td{background:#faf8f1}
+td:hover{background:#e9e0cf!important}
+.hidden{display:none!important}
+
+/* TEST */
+.test-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 330px;
+    gap:22px;
+    align-items:start;
+}
+.test-card,.log-card{
+    background:#fffdf7;
+    border:1px solid #d2cbbb;
+    box-shadow:0 8px 25px rgba(60,50,30,.09);
+}
+.test-card{padding:34px;min-height:520px}
+.test-top{
+    display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid #ddd5c6;padding-bottom:18px;margin-bottom:35px
+}
+.question-no{font-size:16px;color:#756f65}
+.timer{font-family:monospace;font-size:20px;color:#8b5e3c}
+.question-type{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:#8b7355;margin-bottom:18px}
+.question{
+    text-align:center;font-size:38px;line-height:1.4;margin:25px 0 35px;
+}
+.answer-area{text-align:center}
+.answer-input{
+    width:280px;max-width:90%;padding:14px 16px;
+    border:1px solid #aaa193;background:#fff;
+    font:22px Georgia,serif;text-align:center;outline:none;
+}
+.answer-input:focus{border-color:#8b7355;box-shadow:0 0 0 2px rgba(139,115,85,.12)}
+.submit-btn{
+    display:block;margin:18px auto 0;padding:12px 28px;
+    background:#263238;color:#fff;border:0;cursor:pointer;
+    font:16px Georgia,serif;
+}
+.submit-btn:hover{background:#8b7355}
+.feedback{min-height:30px;margin-top:18px;font-size:18px}
+.correct{color:#39734b}.wrong{color:#9b443c}
+.next-btn{
+    margin:8px auto 0;padding:11px 25px;background:#8b7355;color:#fff;
+    border:0;cursor:pointer;font:16px Georgia,serif;display:none
+}
+.help{margin-top:25px;text-align:center;color:#857e73;font-size:14px}
+
+.log-card{position:sticky;top:18px}
+.log-head{
+    padding:18px 20px;border-bottom:1px solid #ddd5c6;
+    display:flex;justify-content:space-between;align-items:center
+}
+.log-head h2{font-size:20px;font-weight:normal;margin:0}
+.score{font-size:14px;color:#756f65}
+.log-list{max-height:590px;overflow:auto}
+.log-item{
+    display:grid;grid-template-columns:34px 1fr auto;
+    gap:8px;align-items:center;padding:12px 15px;
+    border-bottom:1px solid #ebe5d9;font-size:13px
+}
+.log-item .q{font-weight:bold}
+.log-item .details{color:#6f6a61;line-height:1.5}
+.log-item .result{font-weight:bold}
+.pending{color:#aaa}
+.result.correct{color:#39734b}.result.wrong{color:#9b443c}
+.test-controls{display:flex;gap:10px;margin-top:18px}
+.small-btn{
+    padding:9px 15px;border:1px solid #c4baa9;background:#f8f5ed;
+    font:14px Georgia,serif;cursor:pointer
+}
+.small-btn:hover{background:#ebe3d4}
+.factor-grid{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+    max-width:650px;margin:0 auto 20px
+}
+.factor-option{
+    min-width:105px;padding:12px 10px;border:1px solid #c8bfaf;
+    background:#f8f5ed;cursor:pointer;font:16px Georgia,serif
+}
+.factor-option:hover{background:#e9e0cf}
+.factor-option.selected{background:#263238;color:#fff;border-color:#263238}
+.factor-option.correct-opt{background:#dcebdd;border-color:#39734b;color:#245431}
+.factor-option.wrong-opt{background:#f1dddd;border-color:#9b443c;color:#71302c}
+.instructions{
+    background:#eee8da;border-left:3px solid #8b7355;
+    padding:12px 15px;margin-bottom:22px;color:#625d55;font-size:14px
+}
+@media(max-width:850px){
+    .test-layout{grid-template-columns:1fr}
+    .log-card{position:static}
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="brand">Multiplication Study</div>
+    <div class="nav">
+        <button id="tableBtn" class="active" onclick="showTable()">20 × 20 Table</button>
+        <button id="testBtn" onclick="startTest()">Test</button>
+    </div>
+</header>
+
+<main>
+    <section id="tablePage">
+        <div class="page-title">
+            <h1>Multiplication Table</h1>
+            <p>Numbers from 1 to 20</p>
+        </div>
+        <div class="table-wrap">
+            <table id="multiplicationTable"></table>
+        </div>
+    </section>
+
+    <section id="testPage" class="hidden">
+        <div class="page-title">
+            <h1>Multiplication Test</h1>
+            <p>Three question types • Every number stays within the 1–20 table</p>
+        </div>
+
+        <div class="test-layout">
+            <div class="test-card">
+                <div class="test-top">
+                    <div class="question-no" id="questionNo">Question 1</div>
+                    <div class="timer" id="timer">00:00.0</div>
+                </div>
+
+                <div id="testContent"></div>
+
+                <div class="test-controls">
+                    <button class="small-btn" onclick="showTable()">← View Table</button>
+                    <button class="small-btn" onclick="startTest()">↻ New Test</button>
+                </div>
+            </div>
+
+            <aside class="log-card">
+                <div class="log-head">
+                    <h2>Test Log</h2>
+                    <div class="score" id="score">0 / 0</div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </aside>
+        </div>
+    </section>
+</main>
+
+<script>
+const MAX = 20;
+let questionIndex = 0;
+let questions = [];
+let log = [];
+let currentStart = 0;
+let timerInterval = null;
+let answered = false;
+let selectedFactors = [];
+
+function buildTable(){
+    const table = document.getElementById("multiplicationTable");
+    let html = "<thead><tr><th>×</th>";
+    for(let i=1;i<=MAX;i++) html += `<th>${i}</th>`;
+    html += "</tr></thead><tbody>";
+    for(let r=1;r<=MAX;r++){
+        html += `<tr><th>${r}</th>`;
+        for(let c=1;c<=MAX;c++) html += `<td>${r*c}</td>`;
+        html += "</tr>";
+    }
+    html += "</tbody>";
+    table.innerHTML = html;
+}
+
+function showTable(){
+    stopTimer();
+    document.getElementById("tablePage").classList.remove("hidden");
+    document.getElementById("testPage").classList.add("hidden");
+    document.getElementById("tableBtn").classList.add("active");
+    document.getElementById("testBtn").classList.remove("active");
+}
+
+function startTest(){
+    document.getElementById("tablePage").classList.add("hidden");
+    document.getElementById("testPage").classList.remove("hidden");
+    document.getElementById("tableBtn").classList.remove("active");
+    document.getElementById("testBtn").classList.add("active");
+
+    questionIndex=0;
+    log=[];
+    questions=[];
+    for(let i=0;i<30;i++) questions.push(makeQuestion(i%3+1));
+    renderLog();
+    showQuestion();
+}
+
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+
+function makeQuestion(type){
+    if(type===1){
+        const a=rand(1,20), b=rand(1,20);
+        return {type:1,a,b,answer:a*b};
+    }
+    if(type===2){
+        const a=rand(1,20), b=rand(1,20), product=a*b;
+        return {type:2,a,product,answer:b};
+    }
+    const n=rand(2,20);
+    const pairs=[];
+    for(let a=2;a<=Math.floor(Math.sqrt(n));a++){
+        if(n%a===0) pairs.push([a,n/a]);
+    }
+    return {type:3,n,pairs,answer:pairs};
+}
+
+function formatTime(ms){
+    const sec=ms/1000;
+    if(sec<60) return sec.toFixed(1)+"s";
+    const m=Math.floor(sec/60), s=(sec%60).toFixed(1).padStart(4,"0");
+    return `${String(m).padStart(2,"0")}:${s}`;
+}
+
+function startTimer(){
+    currentStart=performance.now();
+    stopTimer();
+    timerInterval=setInterval(()=>{
+        document.getElementById("timer").textContent=formatTime(performance.now()-currentStart);
+    },100);
+}
+
+function stopTimer(){
+    if(timerInterval){clearInterval(timerInterval);timerInterval=null}
+}
+
+function showQuestion(){
+    stopTimer();
+    answered=false;
+    selectedFactors=[];
+    const q=questions[questionIndex];
+    document.getElementById("questionNo").textContent=`Question ${questionIndex+1} of ${questions.length}`;
+    document.getElementById("timer").textContent="00:00.0";
+
+    let html="";
+    if(q.type===1){
+        html=`
+        <div class="question-type">Type 1 · Multiply</div>
+        <div class="question">${q.a} × ${q.b} = ?</div>
+        <div class="answer-area">
+            <input id="answerInput" class="answer-input" type="number" autocomplete="off" placeholder="Your answer">
+            <button class="submit-btn" onclick="submitAnswer()">Check Answer</button>
+            <div id="feedback" class="feedback"></div>
+            <button id="nextBtn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
+        </div>`;
+    }else if(q.type===2){
+        html=`
+        <div class="question-type">Type 2 · Find the Multiplier</div>
+        <div class="question">${q.a} × ? = ${q.product}</div>
+        <div class="answer-area">
+            <input id="answerInput" class="answer-input" type="number" autocomplete="off" placeholder="Your answer">
+            <button class="submit-btn" onclick="submitAnswer()">Check Answer</button>
+            <div id="feedback" class="feedback"></div>
+            <button id="nextBtn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
+        </div>`;
+    }else{
+        const options=makeFactorOptions(q);
+        html=`
+        <div class="question-type">Type 3 · Find the Factors</div>
+        <div class="instructions">Select every non-trivial factor pair that multiplies to the number.</div>
+        <div class="question">${q.n}</div>
+        <div class="factor-grid">
+            ${options.map((p,i)=>`<button class="factor-option" data-index="${i}" onclick="toggleFactor(${i})">${p[0]} × ${p[1]}</button>`).join("")}
+        </div>
+        <div class="answer-area">
+            <button class="submit-btn" onclick="submitFactors()">Check Factors</button>
+            <div id="feedback" class="feedback"></div>
+            <button id="nextBtn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
+        </div>`;
+    }
+    document.getElementById("testContent").innerHTML=html;
+    const input=document.getElementById("answerInput");
+    if(input){
+        input.focus();
+        input.addEventListener("keydown",e=>{if(e.key==="Enter")submitAnswer()});
+    }
+    startTimer();
+}
+
+function makeFactorOptions(q){
+    const correct=q.pairs.map(p=>p.join(","));
+    const set=new Set(correct);
+    for(let a=2;a<=20;a++){
+        for(let b=a;b<=20;b++){
+            if(a*b===q.n) set.add([a,b].join(","));
+        }
+    }
+    let candidates=[];
+    for(let a=2;a<=Math.min(10,q.n);a++){
+        if(q.n%a===0){
+            const b=q.n/a;
+            if(a<=b && b<=20) candidates.push([a,b]);
+        }
+    }
+    // Add nearby distractor pairs from the 20x20 multiplication table.
+    for(let a=2;a<=10 && candidates.length<6;a++){
+        for(let b=a;b<=20 && candidates.length<6;b++){
+            if(a*b!==q.n && !candidates.some(p=>p[0]===a&&p[1]===b)){
+                if(Math.abs(a*b-q.n)<=20) candidates.push([a,b]);
+            }
+        }
+    }
+    // Ensure every actual factor pair is present.
+    q.pairs.forEach(p=>{
+        if(!candidates.some(x=>x[0]===p[0]&&x[1]===p[1])) candidates.push(p);
+    });
+    return candidates.sort(()=>Math.random()-.5);
+}
+
+function submitAnswer(){
+    if(answered)return;
+    const q=questions[questionIndex];
+    const input=document.getElementById("answerInput");
+    const value=Number(input.value);
+    if(input.value.trim()==="")return;
+    const elapsed=performance.now()-currentStart;
+    const ok=value===q.answer;
+    finishQuestion(ok,elapsed,`Answer: ${value}`);
+}
+
+function toggleFactor(i){
+    if(answered)return;
+    const idx=selectedFactors.indexOf(i);
+    if(idx>=0) selectedFactors.splice(idx,1);
+    else selectedFactors.push(i);
+    document.querySelectorAll(".factor-option").forEach((b,j)=>b.classList.toggle("selected",selectedFactors.includes(j)));
+}
+
+function submitFactors(){
+    if(answered)return;
+    const q=questions[questionIndex];
+    const options=[...document.querySelectorAll(".factor-option")];
+    const selected=selectedFactors.map(i=>options[i].textContent.trim().replace(" × ",",")).sort();
+    const correct=q.pairs.map(p=>p.join(",")).sort();
+    const ok=selected.length===correct.length && selected.every((v,i)=>v===correct[i]);
+    const elapsed=performance.now()-currentStart;
+    options.forEach((b,i)=>{
+        const pair=b.textContent.trim().replace(" × ",",");
+        if(correct.includes(pair)) b.classList.add("correct-opt");
+        else if(selectedFactors.includes(i)) b.classList.add("wrong-opt");
+    });
+    finishQuestion(ok,elapsed,`Selected: ${selected.length} factor pair${selected.length===1?"":"s"}`);
+}
+
+function finishQuestion(ok,elapsed,detail){
+    answered=true;
+    stopTimer();
+    log.push({ok,time:elapsed,detail});
+    const feedback=document.getElementById("feedback");
+    feedback.className="feedback "+(ok?"correct":"wrong");
+    feedback.textContent=ok ? `✓ Correct — ${formatTime(elapsed)}` : `✗ Incorrect — ${formatTime(elapsed)}`;
+    const input=document.getElementById("answerInput");
+    if(input)input.disabled=true;
+    const btn=document.querySelector(".submit-btn");
+    if(btn)btn.disabled=true;
+    document.getElementById("nextBtn").style.display="block";
+    renderLog();
+}
+
+function nextQuestion(){
+    if(questionIndex<questions.length-1){
+        questionIndex++;
+        showQuestion();
+    }else{
+        document.getElementById("testContent").innerHTML=`
+        <div class="question-type">Test Complete</div>
+        <div class="question">Well done.</div>
+        <div class="answer-area">
+            <div class="feedback">${log.filter(x=>x.ok).length} correct out of ${log.length}</div>
+            <button class="submit-btn" onclick="startTest()">Start New Test</button>
+        </div>`;
+        stopTimer();
+    }
+}
+
+function renderLog(){
+    const list=document.getElementById("logList");
+    if(!questions.length){list.innerHTML="";return}
+    list.innerHTML=questions.map((q,i)=>{
+        const item=log[i];
+        const type=q.type===1?"Multiply":q.type===2?"Multiplier":"Factors";
+        return `<div class="log-item">
+            <div class="q">${i+1}</div>
+            <div class="details">${type}<br>${item?item.detail:"Waiting…"}</div>
+            <div class="result ${item?(item.ok?"correct":"wrong"):"pending"}">${item?(item.ok?"✓":"✗"):"—"}<br>${item?formatTime(item.time):""}</div>
+        </div>`;
+    }).join("");
+    document.getElementById("score").textContent=`${log.filter(x=>x.ok).length} / ${log.length}`;
+}
+
+buildTable();
+</script>
+</body>
+</html>
