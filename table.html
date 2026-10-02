@@ -1,578 +1,2034 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multiplication Study Table</title>
+<title>Multiplication Study</title>
+
 <style>
-*{box-sizing:border-box}
-:root{
-    --bg:#12141a;
-    --panel:#1b1e26;
-    --panel2:#222632;
-    --line:#333847;
-    --text:#e6e3dc;
-    --muted:#9a968c;
-    --accent:#c4a574;
-    --accent2:#a8895a;
-    --head:#0d0f14;
-    --good:#6fcf8e;
-    --bad:#ef7b72;
+*{
+    box-sizing:border-box;
 }
-body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text)}
+
+body{
+    margin:0;
+    font-family:Georgia,"Times New Roman",serif;
+    background:#0f1115;
+    color:#e8e8e8;
+}
+
 header{
-    height:72px;background:var(--head);color:#fff;display:flex;align-items:center;
-    justify-content:space-between;padding:0 28px;border-bottom:1px solid var(--line);
-    box-shadow:0 3px 12px rgba(0,0,0,.5);
+    height:72px;
+    background:#181b21;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    border-bottom:1px solid #2c313a;
+    box-shadow:0 3px 15px rgba(0,0,0,.4);
 }
-.brand{font-size:25px;letter-spacing:.5px}
-.nav{display:flex;gap:10px}
+
+.brand{
+    font-size:25px;
+    letter-spacing:.5px;
+}
+
+.nav{
+    display:flex;
+    gap:10px;
+}
+
 .nav button{
-    border:1px solid var(--accent2);background:transparent;color:#fff;padding:10px 20px;
-    font:16px Georgia,serif;cursor:pointer;
+    border:1px solid #555d68;
+    background:transparent;
+    color:#ddd;
+    padding:10px 20px;
+    font:16px Georgia,serif;
+    cursor:pointer;
+    transition:.2s;
 }
-.nav button.active,.nav button:hover{background:var(--accent2);color:#111}
-main{max-width:1400px;margin:auto;padding:28px}
-.page-title{text-align:center;margin:8px 0 24px}
-.page-title h1{font-size:34px;font-weight:normal;margin:0 0 7px}
-.page-title p{color:var(--muted);margin:0}
-.table-wrap{overflow:auto;background:var(--panel);border:1px solid var(--line);box-shadow:0 8px 25px rgba(0,0,0,.4)}
-table{border-collapse:collapse;width:100%;min-width:900px}
-th,td{border:1px solid var(--line);text-align:center;padding:10px 7px;font-size:15px}
-thead th{background:var(--head);color:#fff;font-weight:normal}
-tbody th{background:var(--panel2);font-weight:bold;color:var(--accent)}
-tbody tr:nth-child(even) td{background:#1f222b}
-td:hover{background:#3a3425!important;color:#fff}
-.hidden{display:none!important}
 
-/* TEST */
-.test-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;align-items:start}
-.test-card,.log-card{background:var(--panel);border:1px solid var(--line);box-shadow:0 8px 25px rgba(0,0,0,.4)}
-.test-card{padding:34px;min-height:520px}
-.test-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:30px;gap:10px;flex-wrap:wrap}
-.question-no{font-size:16px;color:var(--muted)}
-.timers{display:flex;gap:22px;font-family:monospace;font-size:18px}
-.timers span small{display:block;font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
-.timer{color:var(--accent)}
-.question-type{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent2);margin-bottom:18px;text-align:center}
-.question{text-align:center;font-size:42px;line-height:1.4;margin:20px 0 30px}
-.answer-area{text-align:center}
+.nav button.active,
+.nav button:hover{
+    background:#303641;
+    border-color:#777f8c;
+}
+
+main{
+    max-width:1400px;
+    margin:auto;
+    padding:28px;
+}
+
+.page-title{
+    text-align:center;
+    margin:8px 0 24px;
+}
+
+.page-title h1{
+    font-size:34px;
+    font-weight:normal;
+    margin:0 0 7px;
+    color:#f2f2f2;
+}
+
+.page-title p{
+    color:#9299a3;
+    margin:0;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrap{
+    overflow:auto;
+    background:#171a20;
+    border:1px solid #30353e;
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+}
+
+table{
+    border-collapse:collapse;
+    width:100%;
+    min-width:900px;
+}
+
+th,
+td{
+    border:1px solid #30353e;
+    text-align:center;
+    padding:10px 7px;
+    font-size:15px;
+}
+
+thead th{
+    background:#242932;
+    color:#fff;
+    font-weight:normal;
+}
+
+tbody th{
+    background:#20242b;
+    font-weight:bold;
+}
+
+tbody tr:nth-child(even) td{
+    background:#14171c;
+}
+
+tbody tr:nth-child(odd) td{
+    background:#181b21;
+}
+
+td{
+    color:#d8dbe0;
+}
+
+td:hover{
+    background:#303641!important;
+}
+
+/* ================= TEST ================= */
+
+.test-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 350px;
+    gap:22px;
+    align-items:start;
+}
+
+.test-card,
+.log-card{
+    background:#171a20;
+    border:1px solid #30353e;
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+}
+
+.test-card{
+    padding:34px;
+    min-height:600px;
+}
+
+.test-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #30353e;
+    padding-bottom:18px;
+    margin-bottom:30px;
+}
+
+.question-no{
+    font-size:16px;
+    color:#a5abb4;
+}
+
+.timer{
+    font-family:monospace;
+    font-size:20px;
+    color:#d2d6dc;
+}
+
+.question-type{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    color:#9da5b0;
+    margin-bottom:18px;
+}
+
+.question{
+    text-align:center;
+    font-size:40px;
+    line-height:1.4;
+    margin:25px 0 35px;
+    color:#f3f3f3;
+}
+
+/* ================= START TEST SCREEN ================= */
+
+.start-screen{
+    text-align:center;
+    padding:20px 10px 35px;
+}
+
+.start-screen h2{
+    font-size:28px;
+    font-weight:normal;
+    margin-bottom:10px;
+}
+
+.start-screen p{
+    color:#9299a3;
+    margin-bottom:28px;
+}
+
+.difficulty-box{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin:25px auto 30px;
+}
+
+.difficulty-btn{
+    min-width:120px;
+    padding:14px 24px;
+    background:#1c2027;
+    border:1px solid #444b56;
+    color:#cfd3d8;
+    cursor:pointer;
+    font:16px Georgia,serif;
+    transition:.2s;
+}
+
+.difficulty-btn:hover{
+    background:#2b3039;
+}
+
+.difficulty-btn.active{
+    background:#3d4551;
+    border-color:#7a8492;
+    color:#fff;
+}
+
+.start-test-btn{
+    padding:13px 35px;
+    background:#303641;
+    color:#fff;
+    border:1px solid #59616d;
+    cursor:pointer;
+    font:17px Georgia,serif;
+}
+
+.start-test-btn:hover{
+    background:#464e5b;
+}
+
+/* ================= INPUT ================= */
+
+.answer-area{
+    text-align:center;
+}
+
 .answer-input{
-    width:280px;max-width:90%;padding:14px 16px;border:1px solid #4a5063;background:#12141a;color:var(--text);
-    font:22px Georgia,serif;text-align:center;outline:none;
+    width:280px;
+    max-width:90%;
+    padding:14px 16px;
+    border:1px solid #4a515c;
+    background:#101217;
+    color:#fff;
+    font:22px Georgia,serif;
+    text-align:center;
+    outline:none;
 }
-.answer-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(196,165,116,.2)}
-.answer-input:disabled{opacity:.6}
-.submit-btn,.primary-btn{
-    display:block;margin:18px auto 0;padding:12px 28px;background:var(--accent2);color:#111;border:0;cursor:pointer;
-    font:bold 16px Georgia,serif;
+
+.answer-input:focus{
+    border-color:#8c96a5;
+    box-shadow:0 0 0 2px rgba(150,160,175,.12);
 }
-.submit-btn:hover,.primary-btn:hover{background:var(--accent)}
-.submit-btn:disabled{opacity:.4;cursor:default}
-.end-btn{background:#8c3b36;color:#fff;border:0;padding:9px 18px;font:15px Georgia,serif;cursor:pointer}
-.end-btn:hover{background:#b04842}
-.feedback{min-height:30px;margin-top:18px;font-size:18px}
-.correct{color:var(--good)}.wrong{color:var(--bad)}
-.next-btn{margin:8px auto 0;padding:11px 25px;background:var(--panel2);color:var(--text);border:1px solid var(--accent2);cursor:pointer;font:16px Georgia,serif;display:none}
-.next-btn:hover{background:var(--accent2);color:#111}
 
-.log-card{position:sticky;top:18px}
-.log-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-.log-head h2{font-size:20px;font-weight:normal;margin:0}
-.score{font-size:14px;color:var(--muted)}
-.log-list{max-height:590px;overflow:auto}
-.log-item{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:12px 15px;border-bottom:1px solid var(--line);font-size:13px}
-.log-item .q{font-weight:bold;color:var(--accent)}
-.log-item .details{color:var(--muted);line-height:1.5}
-.log-item .result{font-weight:bold;text-align:right}
-.result.correct{color:var(--good)}.result.wrong{color:var(--bad)}
-.log-empty{padding:20px;color:var(--muted);font-size:14px}
-.test-controls{display:flex;gap:10px;margin-top:22px}
-.small-btn{padding:9px 15px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:14px Georgia,serif;cursor:pointer}
-.small-btn:hover{background:#2d3242}
+.submit-btn{
+    display:block;
+    margin:18px auto 0;
+    padding:12px 28px;
+    background:#303641;
+    color:#fff;
+    border:1px solid #4b535f;
+    cursor:pointer;
+    font:16px Georgia,serif;
+    transition:.2s;
+}
 
-/* setup */
-.setup{max-width:520px;margin:20px auto;text-align:center}
-.setup h3{font-weight:normal;font-size:24px;margin:0 0 6px}
-.setup p{color:var(--muted);font-size:14px;margin:0 0 22px}
-.field{text-align:left;margin-bottom:18px}
-.field label{display:block;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}
-.choices{display:flex;gap:8px;flex-wrap:wrap}
-.choice{flex:1;min-width:100px;padding:11px 8px;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;font:15px Georgia,serif}
-.choice:hover{border-color:var(--accent2)}
-.choice.on{background:var(--accent2);color:#111;border-color:var(--accent2);font-weight:bold}
-.choice small{display:block;font-size:11px;opacity:.75;margin-top:3px}
+.submit-btn:hover{
+    background:#444c59;
+}
 
-/* factors */
-.instructions{background:var(--panel2);border-left:3px solid var(--accent2);padding:12px 15px;margin-bottom:10px;color:var(--muted);font-size:14px}
-.factor-inputs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:640px;margin:0 auto 10px}
-.factor-inputs input{width:92px;padding:11px 6px;border:1px solid #4a5063;background:#12141a;color:var(--text);font:19px Georgia,serif;text-align:center;outline:none}
-.factor-inputs input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(196,165,116,.2)}
-.factor-inputs input.ok{border-color:var(--good);color:var(--good)}
-.factor-inputs input.bad{border-color:var(--bad);color:var(--bad)}
-.answer-reveal{color:var(--muted);font-size:15px;margin-top:6px}
+.submit-btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
 
-/* results */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:10px 0 24px}
-.stat{background:var(--panel2);border:1px solid var(--line);padding:16px 10px;text-align:center}
-.stat b{display:block;font-size:28px;font-weight:normal;color:var(--accent)}
-.stat span{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.stat.g b{color:var(--good)}.stat.r b{color:var(--bad)}
-.bar{height:12px;background:#3a2020;border-radius:6px;overflow:hidden;margin:6px 0 24px}
-.bar div{height:100%;background:var(--good)}
-.res-table{width:100%;min-width:0;font-size:14px;margin-bottom:10px}
-.res-table th,.res-table td{padding:8px 6px}
-.res-table td.left,.res-table th.left{text-align:left}
-.res-wrap{max-height:320px;overflow:auto;border:1px solid var(--line)}
-h4.sec{font-weight:normal;font-size:18px;margin:6px 0 10px;color:var(--accent)}
+.feedback{
+    min-height:30px;
+    margin-top:18px;
+    font-size:18px;
+}
+
+.correct{
+    color:#70c98b;
+}
+
+.wrong{
+    color:#ef7770;
+}
+
+.next-btn{
+    margin:8px auto 0;
+    padding:11px 25px;
+    background:#3b424e;
+    color:#fff;
+    border:1px solid #59616d;
+    cursor:pointer;
+    font:16px Georgia,serif;
+    display:none;
+}
+
+.next-btn:hover{
+    background:#505965;
+}
+
+/* ================= LOG ================= */
+
+.log-card{
+    position:sticky;
+    top:18px;
+}
+
+.log-head{
+    padding:18px 20px;
+    border-bottom:1px solid #30353e;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.log-head h2{
+    font-size:20px;
+    font-weight:normal;
+    margin:0;
+}
+
+.score{
+    font-size:14px;
+    color:#a5abb4;
+}
+
+.log-list{
+    max-height:590px;
+    overflow:auto;
+}
+
+.log-item{
+    display:grid;
+    grid-template-columns:34px 1fr auto;
+    gap:8px;
+    align-items:center;
+    padding:12px 15px;
+    border-bottom:1px solid #282d35;
+    font-size:13px;
+}
+
+.log-item .q{
+    font-weight:bold;
+}
+
+.log-item .details{
+    color:#9ca3ad;
+    line-height:1.5;
+}
+
+.log-item .result{
+    font-weight:bold;
+}
+
+.pending{
+    color:#666d78;
+}
+
+.result.correct{
+    color:#70c98b;
+}
+
+.result.wrong{
+    color:#ef7770;
+}
+
+/* ================= CONTROLS ================= */
+
+.test-controls{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+    flex-wrap:wrap;
+}
+
+.small-btn{
+    padding:9px 15px;
+    border:1px solid #454c57;
+    background:#20242b;
+    color:#ddd;
+    font:14px Georgia,serif;
+    cursor:pointer;
+}
+
+.small-btn:hover{
+    background:#303641;
+}
+
+.stop-btn{
+    border-color:#714d4d;
+    color:#ef9a94;
+}
+
+.stop-btn:hover{
+    background:#3a2727;
+}
+
+/* ================= FACTORS ================= */
+
+.factor-info{
+    text-align:center;
+    color:#9ba2ac;
+    margin-bottom:20px;
+}
+
+.factor-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
+    gap:10px;
+    max-width:700px;
+    margin:0 auto 25px;
+}
+
+.factor-input{
+    width:100%;
+    padding:13px 8px;
+    background:#101217;
+    border:1px solid #454c57;
+    color:#fff;
+    text-align:center;
+    font:18px Georgia,serif;
+    outline:none;
+}
+
+.factor-input:focus{
+    border-color:#7d8795;
+}
+
+.instructions{
+    background:#20242b;
+    border-left:3px solid #687281;
+    padding:12px 15px;
+    margin-bottom:22px;
+    color:#b5bac2;
+    font-size:14px;
+}
+
+/* ================= RESULTS ================= */
+
+.result-panel{
+    max-width:700px;
+    margin:20px auto;
+    background:#111419;
+    border:1px solid #343a44;
+    padding:25px;
+}
+
+.result-title{
+    text-align:center;
+    font-size:28px;
+    margin-bottom:25px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.result-box{
+    background:#1c2027;
+    border:1px solid #303640;
+    padding:18px;
+    text-align:center;
+}
+
+.result-box .value{
+    font-size:26px;
+    color:#f1f1f1;
+    margin-top:6px;
+}
+
+.result-box .label{
+    color:#9299a3;
+    font-size:14px;
+}
+
+/* ================= RESPONSIVE ================= */
+
 @media(max-width:850px){
-    .test-layout{grid-template-columns:1fr}
-    .log-card{position:static}
-    .question{font-size:32px}
+
+    .test-layout{
+        grid-template-columns:1fr;
+    }
+
+    .log-card{
+        position:static;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    header{
+        padding:0 15px;
+    }
+
+    .brand{
+        font-size:20px;
+    }
+
+    .nav button{
+        padding:8px 12px;
+        font-size:14px;
+    }
+
+    main{
+        padding:15px;
+    }
+
+    .test-card{
+        padding:20px;
+    }
+
+    .question{
+        font-size:32px;
+    }
+
+    .difficulty-btn{
+        min-width:100px;
+    }
 }
 </style>
 </head>
+
 <body>
 
 <header>
-    <div class="brand">Multiplication Study</div>
-    <div class="nav">
-        <button id="tableBtn" class="active" onclick="showTable()">20 × 20 Table</button>
-        <button id="testBtn" onclick="showTest()">Test</button>
+
+    <div class="brand">
+        Multiplication Study
     </div>
+
+    <div class="nav">
+
+        <button
+            id="tableBtn"
+            class="active"
+            onclick="showTable()">
+            20 × 20 Table
+        </button>
+
+        <button
+            id="testBtn"
+            onclick="openTest()">
+            Test
+        </button>
+
+    </div>
+
 </header>
 
+
 <main>
-    <section id="tablePage">
-        <div class="page-title">
-            <h1>Multiplication Table</h1>
-            <p>Numbers from 1 to 20</p>
-        </div>
-        <div class="table-wrap">
-            <table id="multiplicationTable"></table>
-        </div>
-    </section>
 
-    <section id="testPage" class="hidden">
-        <div class="page-title">
-            <h1>Multiplication Test</h1>
-            <p>Three question types • Three difficulty levels</p>
-        </div>
+<!-- =========================================================
+     TABLE PAGE
+========================================================= -->
 
-        <div class="test-layout">
-            <div class="test-card">
-                <div class="test-top">
-                    <div class="question-no" id="questionNo">Ready</div>
-                    <div class="timers">
-                        <span><small>Question</small><b class="timer" id="timer">00:00.0</b></span>
-                        <span><small>Total</small><b class="timer" id="totalTimer">00:00.0</b></span>
-                    </div>
-                    <button class="end-btn hidden" id="endBtn" onclick="endTest()">■ End Test</button>
+<section id="tablePage">
+
+    <div class="page-title">
+
+        <h1>Multiplication Table</h1>
+
+        <p>Numbers from 1 to 20</p>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table id="multiplicationTable"></table>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TEST PAGE
+========================================================= -->
+
+<section id="testPage" class="hidden">
+
+    <div class="page-title">
+
+        <h1>Multiplication Test</h1>
+
+        <p>
+            Select your difficulty and start the test
+        </p>
+
+    </div>
+
+
+    <div class="test-layout">
+
+        <!-- ================= TEST CARD ================= -->
+
+        <div class="test-card">
+
+            <div class="test-top">
+
+                <div
+                    class="question-no"
+                    id="questionNo">
+                    Test Setup
                 </div>
 
-                <div id="testContent"></div>
-
-                <div class="test-controls">
-                    <button class="small-btn" onclick="showTable()">← View Table</button>
+                <div
+                    class="timer"
+                    id="timer">
+                    00:00.0
                 </div>
+
             </div>
 
-            <aside class="log-card">
-                <div class="log-head">
-                    <h2>Test Log</h2>
-                    <div class="score" id="score">0 / 0</div>
-                </div>
-                <div class="log-list" id="logList"><div class="log-empty">Questions you answer will appear here.</div></div>
-            </aside>
+
+            <div id="testContent"></div>
+
+
+            <div class="test-controls">
+
+                <button
+                    class="small-btn"
+                    onclick="showTable()">
+                    ← View Table
+                </button>
+
+                <button
+                    class="small-btn"
+                    onclick="showStartScreen()">
+                    ⚙ Test Setup
+                </button>
+
+                <button
+                    class="small-btn stop-btn"
+                    onclick="endTest()">
+                    ■ Stop Test
+                </button>
+
+            </div>
+
         </div>
-    </section>
+
+
+        <!-- ================= LOG ================= -->
+
+        <aside class="log-card">
+
+            <div class="log-head">
+
+                <h2>Test Log</h2>
+
+                <div
+                    class="score"
+                    id="score">
+                    0 / 0
+                </div>
+
+            </div>
+
+
+            <div
+                class="log-list"
+                id="logList">
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
 </main>
 
+
 <script>
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
 const MAX = 20;
-let settings = {difficulty:"easy", qtype:"mixed"};
-let running = false;
-let current = null;        // current question
-let log = [];              // answered questions
+
+let questionIndex = 0;
+
+let questions = [];
+
+let log = [];
+
+let currentStart = 0;
+
+let timerInterval = null;
+
 let answered = false;
-let qStart = 0, testStart = 0;
-let qInterval = null, totalInterval = null;
-let qCount = 0;
 
-/* ---------- table ---------- */
+let selectedDifficulties = [];
+
+
+/* =========================================================
+   BUILD TABLE
+========================================================= */
+
 function buildTable(){
-    let html = "<thead><tr><th>×</th>";
-    for(let i=1;i<=MAX;i++) html += `<th>${i}</th>`;
-    html += "</tr></thead><tbody>";
-    for(let r=1;r<=MAX;r++){
-        html += `<tr><th>${r}</th>`;
-        for(let c=1;c<=MAX;c++) html += `<td>${r*c}</td>`;
-        html += "</tr>";
+
+    const table =
+        document.getElementById("multiplicationTable");
+
+    let html =
+        "<thead><tr><th>×</th>";
+
+    for(let i=1;i<=MAX;i++){
+
+        html += `<th>${i}</th>`;
+
     }
-    document.getElementById("multiplicationTable").innerHTML = html + "</tbody>";
+
+    html += "</tr></thead><tbody>";
+
+
+    for(let r=1;r<=MAX;r++){
+
+        html += `<tr><th>${r}</th>`;
+
+        for(let c=1;c<=MAX;c++){
+
+            html += `<td>${r*c}</td>`;
+
+        }
+
+        html += "</tr>";
+
+    }
+
+    html += "</tbody>";
+
+    table.innerHTML = html;
+
 }
 
-/* ---------- navigation ---------- */
+
+/* =========================================================
+   SHOW TABLE
+========================================================= */
+
 function showTable(){
-    stopTimers();
-    running = false;
-    document.getElementById("tablePage").classList.remove("hidden");
-    document.getElementById("testPage").classList.add("hidden");
-    document.getElementById("tableBtn").classList.add("active");
-    document.getElementById("testBtn").classList.remove("active");
-}
-function showTest(){
-    document.getElementById("tablePage").classList.add("hidden");
-    document.getElementById("testPage").classList.remove("hidden");
-    document.getElementById("tableBtn").classList.remove("active");
-    document.getElementById("testBtn").classList.add("active");
-    if(!running) showSetup();
+
+    stopTimer();
+
+    document
+        .getElementById("tablePage")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("testPage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("tableBtn")
+        .classList.add("active");
+
+    document
+        .getElementById("testBtn")
+        .classList.remove("active");
+
 }
 
-/* ---------- helpers ---------- */
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-function pad(n){return String(n).padStart(2,"0")}
-function formatTime(ms){
-    const sec = ms/1000;
-    if(sec < 60) return sec.toFixed(1)+"s";
-    const m = Math.floor(sec/60), s = (sec%60).toFixed(1);
-    return `${m}m ${s}s`;
-}
-function clock(ms){
-    const t = ms/1000, m = Math.floor(t/60), s = (t%60).toFixed(1).padStart(4,"0");
-    return `${pad(m)}:${s}`;
-}
-function stopTimers(){
-    clearInterval(qInterval); clearInterval(totalInterval);
-    qInterval = totalInterval = null;
-}
-function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
 
-/* ---------- setup screen ---------- */
-function showSetup(){
-    stopTimers();
-    running = false;
-    document.getElementById("endBtn").classList.add("hidden");
-    document.getElementById("questionNo").textContent = "Ready";
-    document.getElementById("timer").textContent = "00:00.0";
-    document.getElementById("totalTimer").textContent = "00:00.0";
-    document.getElementById("testContent").innerHTML = `
-    <div class="setup">
-        <h3>Choose your test</h3>
-        <p>Press Start when you are ready. The test continues until you press End.<br>Shortcuts: Enter = check / next · S = show answer · F or Numpad + = next question</p>
-        <div class="field">
-            <label>Difficulty</label>
-            <div class="choices" id="diffChoices">
-                <button class="choice" data-v="easy" onclick="pick('difficulty','easy')">Easy<small>1-digit × 1-digit</small></button>
-                <button class="choice" data-v="medium" onclick="pick('difficulty','medium')">Medium<small>1-digit × 2-digit</small></button>
-                <button class="choice" data-v="hard" onclick="pick('difficulty','hard')">Hard<small>2-digit × 2-digit</small></button>
-            </div>
-        </div>
-        <div class="field">
-            <label>Question type</label>
-            <div class="choices" id="typeChoices">
-                <button class="choice" data-v="mixed" onclick="pick('qtype','mixed')">Mixed</button>
-                <button class="choice" data-v="1" onclick="pick('qtype','1')">Multiply</button>
-                <button class="choice" data-v="2" onclick="pick('qtype','2')">Find ?</button>
-                <button class="choice" data-v="3" onclick="pick('qtype','3')">Factors</button>
-            </div>
-        </div>
-        <button class="primary-btn" onclick="startTest()">▶ Start Test</button>
-    </div>`;
-    refreshChoices();
-}
-function pick(key,val){settings[key]=val;refreshChoices()}
-function refreshChoices(){
-    document.querySelectorAll("#diffChoices .choice").forEach(b=>b.classList.toggle("on",b.dataset.v===settings.difficulty));
-    document.querySelectorAll("#typeChoices .choice").forEach(b=>b.classList.toggle("on",b.dataset.v===settings.qtype));
+/* =========================================================
+   OPEN TEST
+========================================================= */
+
+function openTest(){
+
+    document
+        .getElementById("tablePage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("testPage")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("tableBtn")
+        .classList.remove("active");
+
+    document
+        .getElementById("testBtn")
+        .classList.add("active");
+
+    showStartScreen();
+
 }
 
-/* ---------- start / end ---------- */
-function startTest(){
+
+/* =========================================================
+   TEST SETUP SCREEN
+========================================================= */
+
+function showStartScreen(){
+
+    stopTimer();
+
+    questionIndex = 0;
+
     log = [];
-    qCount = 0;
-    running = true;
-    testStart = performance.now();
-    document.getElementById("endBtn").classList.remove("hidden");
-    stopTimers();
-    totalInterval = setInterval(()=>{
-        document.getElementById("totalTimer").textContent = clock(performance.now()-testStart);
-    },100);
-    renderLog();
-    nextQuestion();
+
+    questions = [];
+
+
+    document
+        .getElementById("questionNo")
+        .textContent = "Test Setup";
+
+    document
+        .getElementById("timer")
+        .textContent = "00:00.0";
+
+
+    document
+        .getElementById("score")
+        .textContent = "0 / 0";
+
+
+    document
+        .getElementById("logList")
+        .innerHTML = "";
+
+
+    document
+        .getElementById("testContent")
+        .innerHTML = `
+
+        <div class="start-screen">
+
+            <h2>
+                Select Difficulty
+            </h2>
+
+            <p>
+                You can select one, two, or all three.
+            </p>
+
+
+            <div class="difficulty-box">
+
+                <button
+                    class="difficulty-btn"
+                    data-level="easy"
+                    onclick="toggleDifficulty('easy')">
+                    Easy
+                </button>
+
+
+                <button
+                    class="difficulty-btn"
+                    data-level="medium"
+                    onclick="toggleDifficulty('medium')">
+                    Medium
+                </button>
+
+
+                <button
+                    class="difficulty-btn"
+                    data-level="hard"
+                    onclick="toggleDifficulty('hard')">
+                    Hard
+                </button>
+
+            </div>
+
+
+            <button
+                class="start-test-btn"
+                onclick="startTest()">
+
+                Start Test
+
+            </button>
+
+        </div>
+
+        `;
+
+
+    selectedDifficulties = [];
+
 }
+
+
+/* =========================================================
+   SELECT DIFFICULTY
+========================================================= */
+
+function toggleDifficulty(level){
+
+    const index =
+        selectedDifficulties.indexOf(level);
+
+
+    if(index>=0){
+
+        selectedDifficulties.splice(index,1);
+
+    }else{
+
+        selectedDifficulties.push(level);
+
+    }
+
+
+    document
+        .querySelectorAll(".difficulty-btn")
+        .forEach(button=>{
+
+            const buttonLevel =
+                button.dataset.level;
+
+            button.classList.toggle(
+                "active",
+                selectedDifficulties.includes(buttonLevel)
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   START TEST
+========================================================= */
+
+function startTest(){
+
+    if(selectedDifficulties.length===0){
+
+        alert(
+            "Please select at least one difficulty level."
+        );
+
+        return;
+
+    }
+
+
+    questionIndex = 0;
+
+    log = [];
+
+    questions = [];
+
+
+    for(let i=0;i<30;i++){
+
+        const level =
+            selectedDifficulties[
+                i % selectedDifficulties.length
+            ];
+
+        questions.push(
+            makeQuestion(level)
+        );
+
+    }
+
+
+    renderLog();
+
+    showQuestion();
+
+}
+
+
+/* =========================================================
+   RANDOM NUMBER
+========================================================= */
+
+function rand(min,max){
+
+    return Math.floor(
+        Math.random()*(max-min+1)
+    )+min;
+
+}
+
+
+/* =========================================================
+   MAKE QUESTION
+========================================================= */
+
+function makeQuestion(difficulty){
+
+    /* ================= EASY ================= */
+
+    if(difficulty==="easy"){
+
+        const a = rand(1,9);
+
+        const b = rand(1,9);
+
+        return {
+
+            difficulty:"Easy",
+
+            type:"multiply",
+
+            a:a,
+
+            b:b,
+
+            answer:a*b
+
+        };
+
+    }
+
+
+    /* ================= MEDIUM ================= */
+
+    if(difficulty==="medium"){
+
+        const oneDigit = rand(1,9);
+
+        const twoDigit = rand(10,20);
+
+
+        if(Math.random()<0.5){
+
+            return {
+
+                difficulty:"Medium",
+
+                type:"multiply",
+
+                a:oneDigit,
+
+                b:twoDigit,
+
+                answer:oneDigit*twoDigit
+
+            };
+
+        }
+
+
+        return {
+
+            difficulty:"Medium",
+
+            type:"multiply",
+
+            a:twoDigit,
+
+            b:oneDigit,
+
+            answer:twoDigit*oneDigit
+
+        };
+
+    }
+
+
+    /* ================= HARD / TYPE 3 ================= */
+
+    if(difficulty==="hard"){
+
+        /*
+           Type 3 / Hard:
+
+           Both numbers are limited to 1–20.
+
+           Therefore the maximum possible
+           multiplication result is:
+
+           20 × 20 = 400
+        */
+
+        const a = rand(1,20);
+
+        const b = rand(1,20);
+
+        return {
+
+            difficulty:"Hard",
+
+            type:"multiply",
+
+            a:a,
+
+            b:b,
+
+            answer:a*b
+
+        };
+
+    }
+
+}
+
+
+/* =========================================================
+   FORMAT TIME
+========================================================= */
+
+function formatTime(ms){
+
+    const sec = ms/1000;
+
+
+    if(sec<60){
+
+        return sec.toFixed(1)+"s";
+
+    }
+
+
+    const m =
+        Math.floor(sec/60);
+
+    const s =
+        Math.floor(sec%60);
+
+
+    return String(m).padStart(2,"0")
+        +":"
+        +String(s).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   START TIMER
+========================================================= */
+
+function startTimer(){
+
+    currentStart =
+        performance.now();
+
+
+    stopTimer();
+
+
+    timerInterval =
+        setInterval(()=>{
+
+            document
+                .getElementById("timer")
+                .textContent =
+                formatTime(
+                    performance.now()
+                    -
+                    currentStart
+                );
+
+        },100);
+
+}
+
+
+/* =========================================================
+   STOP TIMER
+========================================================= */
+
+function stopTimer(){
+
+    if(timerInterval){
+
+        clearInterval(timerInterval);
+
+        timerInterval=null;
+
+    }
+
+}
+
+
+/* =========================================================
+   SHOW QUESTION
+========================================================= */
+
+function showQuestion(){
+
+    stopTimer();
+
+    answered=false;
+
+
+    const q =
+        questions[questionIndex];
+
+
+    document
+        .getElementById("questionNo")
+        .textContent =
+        `Question ${questionIndex+1} of ${questions.length}`;
+
+
+    document
+        .getElementById("timer")
+        .textContent =
+        "00:00.0";
+
+
+    let html = `
+
+    <div class="question-type">
+
+        ${q.difficulty} · Multiplication
+
+    </div>
+
+
+    <div class="question">
+
+        ${q.a} × ${q.b} = ?
+
+    </div>
+
+
+    <div class="answer-area">
+
+        <input
+            id="answerInput"
+            class="answer-input"
+            type="number"
+            autocomplete="off"
+            placeholder="Your answer"
+        >
+
+
+        <button
+            class="submit-btn"
+            id="submitBtn"
+            onclick="submitAnswer()">
+
+            Check Answer
+
+        </button>
+
+
+        <div
+            id="feedback"
+            class="feedback">
+        </div>
+
+
+        <button
+            id="nextBtn"
+            class="next-btn"
+            onclick="nextQuestion()">
+
+            Next Question →
+
+        </button>
+
+    </div>
+
+    `;
+
+
+    document
+        .getElementById("testContent")
+        .innerHTML = html;
+
+
+    const input =
+        document.getElementById("answerInput");
+
+
+    input.focus();
+
+
+    /*
+       ENTER:
+
+       First Enter  = Check Answer
+       Second Enter = Next Question
+    */
+
+    input.addEventListener(
+        "keydown",
+        function(e){
+
+            if(e.key==="Enter"){
+
+                e.preventDefault();
+
+
+                if(!answered){
+
+                    submitAnswer();
+
+                }else{
+
+                    nextQuestion();
+
+                }
+
+            }
+
+        }
+    );
+
+
+    startTimer();
+
+}
+
+
+/* =========================================================
+   SUBMIT ANSWER
+========================================================= */
+
+function submitAnswer(){
+
+    if(answered){
+
+        return;
+
+    }
+
+
+    const q =
+        questions[questionIndex];
+
+
+    const input =
+        document.getElementById("answerInput");
+
+
+    if(input.value.trim()===""){
+
+        return;
+
+    }
+
+
+    const value =
+        Number(input.value);
+
+
+    const elapsed =
+        performance.now()
+        -
+        currentStart;
+
+
+    const ok =
+        value===q.answer;
+
+
+    finishQuestion(
+
+        ok,
+
+        elapsed,
+
+        `Your answer: ${value}`
+
+    );
+
+}
+
+
+/* =========================================================
+   SHOW ANSWER
+========================================================= */
+
+function showAnswer(){
+
+    if(answered){
+
+        return;
+
+    }
+
+
+    const q =
+        questions[questionIndex];
+
+
+    const elapsed =
+        performance.now()
+        -
+        currentStart;
+
+
+    finishQuestion(
+
+        false,
+
+        elapsed,
+
+        `Answer shown: ${q.answer}`
+
+    );
+
+
+    const feedback =
+        document.getElementById("feedback");
+
+
+    if(feedback){
+
+        feedback.className =
+            "feedback wrong";
+
+        feedback.textContent =
+            `Answer: ${q.answer}`;
+
+    }
+
+}
+
+
+/* =========================================================
+   FINISH QUESTION
+========================================================= */
+
+function finishQuestion(
+    ok,
+    elapsed,
+    detail
+){
+
+    answered=true;
+
+    stopTimer();
+
+
+    log.push({
+
+        ok:ok,
+
+        time:elapsed,
+
+        detail:detail
+
+    });
+
+
+    const feedback =
+        document.getElementById("feedback");
+
+
+    feedback.className =
+        "feedback "
+        +
+        (ok ? "correct" : "wrong");
+
+
+    feedback.textContent =
+        ok
+
+        ? `✓ Correct — ${formatTime(elapsed)}`
+
+        : `✗ Incorrect — ${formatTime(elapsed)}`;
+
+
+    const input =
+        document.getElementById("answerInput");
+
+
+    if(input){
+
+        input.disabled=true;
+
+    }
+
+
+    const submit =
+        document.getElementById("submitBtn");
+
+
+    if(submit){
+
+        submit.disabled=true;
+
+    }
+
+
+    const next =
+        document.getElementById("nextBtn");
+
+
+    if(next){
+
+        next.style.display="block";
+
+    }
+
+
+    renderLog();
+
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function nextQuestion(){
+
+    if(!answered){
+
+        return;
+
+    }
+
+
+    if(
+        questionIndex
+        <
+        questions.length-1
+    ){
+
+        questionIndex++;
+
+        showQuestion();
+
+    }else{
+
+        showTestResults();
+
+    }
+
+}
+
+
+/* =========================================================
+   STOP TEST
+========================================================= */
 
 function endTest(){
-    if(!running) return;
-    const totalMs = performance.now() - testStart;
-    stopTimers();
-    running = false;
-    document.getElementById("endBtn").classList.add("hidden");
-    document.getElementById("questionNo").textContent = "Test finished";
-    showResults(totalMs);
-}
 
-/* ---------- question generation ---------- */
-function pair(diff){
-    const small = ()=>rand(1,9), big = ()=>rand(10,20);
-    if(diff==="easy") return [small(),small()];
-    if(diff==="medium"){ return Math.random()<.5 ? [small(),big()] : [big(),small()]; }
-    return [big(),big()];
-}
+    stopTimer();
 
-function factorsOf(n){
-    const f = [];
-    for(let i=2;i*i<=n;i++){
-        if(n%i===0){ f.push(i); if(i!==n/i) f.push(n/i); }
-    }
-    return f.sort((a,b)=>a-b);
-}
 
-function factorNumber(diff){
-    // Type 3 numbers are always between 2 and 400 (the 20 × 20 table limit).
-    // Primes are skipped because they have no factors besides 1 and themselves.
-    for(let t=0;t<2000;t++){
-        const n = rand(2,400);
-        const f = factorsOf(n);
-        if(f.length>=1) return {n,f};
-    }
-    return {n:12,f:[2,3,4,6]};
-}
+    if(log.length===0){
 
-function makeQuestion(){
-    let type = settings.qtype==="mixed" ? rand(1,3) : Number(settings.qtype);
-    const d = settings.difficulty;
-    if(type===1){
-        const [a,b] = pair(d);
-        return {type:1,a,b,answer:a*b,text:`${a} × ${b}`};
-    }
-    if(type===2){
-        const [a,b] = pair(d);
-        return {type:2,a,b,answer:b,text:`${a} × ? = ${a*b}`};
-    }
-    const {n,f} = factorNumber(d);
-    return {type:3,n,answer:f,text:`Factors of ${n}`};
-}
+        showStartScreen();
 
-/* ---------- showing a question ---------- */
-function nextQuestion(){
-    if(!running) return;
-    current = makeQuestion();
-    answered = false;
-    qCount++;
-    document.getElementById("questionNo").textContent = `Question ${qCount}`;
-    document.getElementById("timer").textContent = "00:00.0";
-    const q = current;
-    let html = "";
-    if(q.type===1){
-        html = `
-        <div class="question-type">Type 1 · Multiply</div>
-        <div class="question">${q.a} × ${q.b} = ?</div>
-        <div class="answer-area">
-            <input id="answerInput" class="answer-input" type="number" autocomplete="off" placeholder="Your answer">
-            <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">Check Answer</button>
-            <div id="feedback" class="feedback"></div>
-            <button id="nextBtn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
-        </div>`;
-    } else if(q.type===2){
-        html = `
-        <div class="question-type">Type 2 · Find the missing number</div>
-        <div class="question">${q.a} × ? = ${q.a*q.b}</div>
-        <div class="answer-area">
-            <input id="answerInput" class="answer-input" type="number" autocomplete="off" placeholder="Missing number">
-            <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">Check Answer</button>
-            <div id="feedback" class="feedback"></div>
-            <button id="nextBtn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
-        </div>`;
-    } else {
-        const boxes = q.answer.map((_,i)=>`<input type="number" class="fbox" data-i="${i}" autocomplete="off" placeholder="?">`).join("");
-        html = `
-        <div class="question-type">Type 3 · Find the factors</div>
-        <div class="instructions">Write every factor of the number, except 1 and the number itself. There are <b>${q.answer.length}</b> factor${q.answer.length===1?"":"s"} — one box for each.</div>
-        <div class="question">${q.n}</div>
-        <div class="factor-inputs" id="factorInputs">${boxes}</div>
-        <div class="answer-area">
-            <button class="submit-btn" id="submitBtn" onclick="submitFactors()">Check Factors</button>
-            <div id="feedback" class="feedback"></div>
-            <div id="reveal" class="answer-reveal"></div>
-            <button id="nextBtn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
-        </div>`;
-    }
-    document.getElementById("testContent").innerHTML = html;
-
-    const input = document.getElementById("answerInput");
-    if(input){
-        input.focus();
-        input.addEventListener("keydown",e=>{ if(e.key==="Enter") answered ? nextQuestion() : submitAnswer(); });
-    } else {
-        const boxes = [...document.querySelectorAll(".fbox")];
-        boxes[0].focus();
-        boxes.forEach((b,i)=>b.addEventListener("keydown",e=>{
-            if(e.key==="Enter"){
-                if(answered) return nextQuestion();
-                if(i<boxes.length-1) boxes[i+1].focus(); else submitFactors();
-            }
-        }));
-    }
-    clearInterval(qInterval);
-    qStart = performance.now();
-    qInterval = setInterval(()=>{
-        document.getElementById("timer").textContent = clock(performance.now()-qStart);
-    },100);
-}
-
-/* ---------- answering ---------- */
-function submitAnswer(){
-    if(answered || !running) return;
-    const input = document.getElementById("answerInput");
-    if(input.value.trim()==="") return;
-    const value = Number(input.value);
-    const elapsed = performance.now()-qStart;
-    const ok = value === current.answer;
-    input.disabled = true;
-    finishQuestion(ok, elapsed, String(value), String(current.answer));
-}
-
-function submitFactors(){
-    if(answered || !running) return;
-    const boxes = [...document.querySelectorAll(".fbox")];
-    const vals = boxes.map(b=>b.value.trim());
-    if(vals.every(v=>v==="")) return;
-    const elapsed = performance.now()-qStart;
-    const correct = current.answer;
-    const nums = vals.map(v=>v===""?NaN:Number(v));
-    // each correct factor entered once (order does not matter)
-    let ok = nums.every(v=>correct.includes(v)) && new Set(nums).size===correct.length;
-    boxes.forEach((b,i)=>{
-        const v = nums[i];
-        const good = correct.includes(v) && nums.indexOf(v)===i;
-        b.classList.add(good?"ok":"bad");
-        b.disabled = true;
-    });
-    if(!ok) document.getElementById("reveal").textContent = "Factors: " + correct.join(", ");
-    finishQuestion(ok, elapsed, vals.filter(v=>v!=="").join(", ")||"—", correct.join(", "));
-}
-
-function finishQuestion(ok, elapsed, given, correctText){
-    answered = true;
-    clearInterval(qInterval);
-    qInterval = null;
-    log.push({type:current.type, text:current.text, ok, time:elapsed, given, correct:correctText});
-    const fb = document.getElementById("feedback");
-    fb.className = "feedback " + (ok?"correct":"wrong");
-    fb.textContent = ok ? `✓ Correct — ${formatTime(elapsed)}`
-                        : (current.type===3 ? `✗ Incorrect — ${formatTime(elapsed)}`
-                                            : `✗ Incorrect — answer is ${current.answer} (${formatTime(elapsed)})`);
-    document.getElementById("submitBtn").disabled = true;
-    const nb = document.getElementById("nextBtn");
-    nb.style.display = "block";
-    nb.focus();
-    renderLog();
-}
-
-/* ---------- log ---------- */
-function renderLog(){
-    const list = document.getElementById("logList");
-    if(!log.length){
-        list.innerHTML = '<div class="log-empty">Questions you answer will appear here.</div>';
-    } else {
-        list.innerHTML = log.map((x,i)=>`
-        <div class="log-item">
-            <div class="q">${i+1}</div>
-            <div class="details">${esc(x.text)}<br>${esc(x.given)}</div>
-            <div class="result ${x.ok?"correct":"wrong"}">${x.ok?"✓":"✗"}<br>${formatTime(x.time)}</div>
-        </div>`).reverse().join("");
-    }
-    document.getElementById("score").textContent = `${log.filter(x=>x.ok).length} / ${log.length}`;
-}
-
-/* ---------- results ---------- */
-function showResults(totalMs){
-    const total = log.length;
-    const right = log.filter(x=>x.ok).length;
-    const wrong = total - right;
-    const pct = total ? (right/total*100) : 0;
-    const spent = log.reduce((s,x)=>s+x.time,0);
-    const avg = total ? spent/total : 0;
-    const fastest = total ? Math.min(...log.map(x=>x.time)) : 0;
-    const slowest = total ? Math.max(...log.map(x=>x.time)) : 0;
-
-    const names = {1:"Multiply",2:"Find ?",3:"Factors"};
-    let typeRows = "";
-    [1,2,3].forEach(t=>{
-        const items = log.filter(x=>x.type===t);
-        if(!items.length) return;
-        const r = items.filter(x=>x.ok).length;
-        const tm = items.reduce((s,x)=>s+x.time,0);
-        typeRows += `<tr><td class="left">${names[t]}</td><td>${items.length}</td><td>${r}</td><td>${items.length-r}</td><td>${(r/items.length*100).toFixed(1)}%</td><td>${formatTime(tm)}</td><td>${formatTime(tm/items.length)}</td></tr>`;
-    });
-
-    const rows = log.map((x,i)=>`<tr>
-        <td>${i+1}</td><td class="left">${esc(x.text)}</td><td class="left">${esc(x.given)}</td>
-        <td>${formatTime(x.time)}</td><td class="${x.ok?"correct":"wrong"}">${x.ok?"✓ Correct":"✗ Wrong"}</td></tr>`).join("");
-
-    document.getElementById("testContent").innerHTML = `
-    <div class="question-type">Test Analysis · ${settings.difficulty.toUpperCase()}</div>
-    ${total ? "" : '<p style="text-align:center;color:var(--muted)">No questions were answered.</p>'}
-    <div class="stats">
-        <div class="stat"><b>${total}</b><span>Questions</span></div>
-        <div class="stat g"><b>${right}</b><span>Correct</span></div>
-        <div class="stat r"><b>${wrong}</b><span>Wrong</span></div>
-        <div class="stat"><b>${pct.toFixed(1)}%</b><span>Accuracy</span></div>
-        <div class="stat"><b>${clock(totalMs)}</b><span>Total time</span></div>
-        <div class="stat"><b>${formatTime(avg)}</b><span>Avg / question</span></div>
-    </div>
-    <div class="bar"><div style="width:${pct}%"></div></div>
-    ${total ? `
-    <h4 class="sec">Time taken</h4>
-    <p style="color:var(--muted);font-size:14px;margin:0 0 16px">
-        You answered ${total} question${total===1?"":"s"} in ${formatTime(totalMs)}.
-        Fastest: ${formatTime(fastest)} · Slowest: ${formatTime(slowest)}.
-    </p>
-    <h4 class="sec">By question type</h4>
-    <div class="res-wrap" style="max-height:none;margin-bottom:22px"><table class="res-table">
-        <thead><tr><th class="left">Type</th><th>Asked</th><th>Correct</th><th>Wrong</th><th>Accuracy</th><th>Time</th><th>Avg</th></tr></thead>
-        <tbody>${typeRows}</tbody></table></div>
-    <h4 class="sec">Every question</h4>
-    <div class="res-wrap"><table class="res-table">
-        <thead><tr><th>#</th><th class="left">Question</th><th class="left">Your answer</th><th>Time</th><th>Result</th></tr></thead>
-        <tbody>${rows}</tbody></table></div>` : ""}
-    <button class="primary-btn" onclick="showSetup()">↻ New Test</button>`;
-}
-
-/* ---------- keyboard shortcuts ---------- */
-function showAnswer(){
-    if(answered || !running || !current) return;
-    const elapsed = performance.now()-qStart;
-    if(current.type===3){
-        const boxes = [...document.querySelectorAll(".fbox")];
-        boxes.forEach((b,i)=>{ b.value = current.answer[i]; b.classList.add("ok"); b.disabled = true; });
-        document.getElementById("reveal").textContent = "Factors: " + current.answer.join(", ");
-        finishQuestion(false, elapsed, "Answer shown", current.answer.join(", "));
-    } else {
-        const input = document.getElementById("answerInput");
-        input.value = current.answer;
-        input.disabled = true;
-        finishQuestion(false, elapsed, "Answer shown", String(current.answer));
-    }
-}
-
-document.addEventListener("keydown", e=>{
-    if(!running) return;
-    // Numpad + (or +) or F: next question once the current one is answered
-    if((e.key==="+" || e.code==="NumpadAdd" || e.key==="f" || e.key==="F") && answered){
-        e.preventDefault();
-        nextQuestion();
         return;
+
     }
-    // S: show the answer (counts as wrong)
-    if((e.key==="s" || e.key==="S") && !answered){
-        e.preventDefault();
-        showAnswer();
+
+
+    showTestResults();
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        /*
+           ENTER
+
+           Handled separately by the
+           answer input so that it can
+           perform Check → Next.
+        */
+
+
+        /*
+           S = Show Answer
+        */
+
+        if(
+            e.key.toLowerCase()==="s"
+            &&
+            !e.ctrlKey
+            &&
+            !e.altKey
+            &&
+            !e.metaKey
+        ){
+
+            const testPage =
+                document.getElementById("testPage");
+
+
+            const visible =
+                testPage &&
+                !testPage.classList.contains("hidden");
+
+
+            if(visible){
+
+                showAnswer();
+
+            }
+
+        }
+
+
+        /*
+           F = Next Question
+        */
+
+        if(
+            e.key.toLowerCase()==="f"
+            &&
+            !e.ctrlKey
+            &&
+            !e.altKey
+            &&
+            !e.metaKey
+        ){
+
+            const testPage =
+                document.getElementById("testPage");
+
+
+            const visible =
+                testPage &&
+                !testPage.classList.contains("hidden");
+
+
+            if(visible && answered){
+
+                e.preventDefault();
+
+                nextQuestion();
+
+            }
+
+        }
+
+
+        /*
+           NUMPAD +
+
+           e.code === "NumpadAdd"
+           makes this reliable even
+           when keyboard layout varies.
+        */
+
+        if(
+            (e.key==="+" || e.code==="NumpadAdd")
+            &&
+            answered
+        ){
+
+            const testPage =
+                document.getElementById("testPage");
+
+
+            const visible =
+                testPage &&
+                !testPage.classList.contains("hidden");
+
+
+            if(visible){
+
+                e.preventDefault();
+
+                nextQuestion();
+
+            }
+
+        }
+
     }
-});
+);
+
+
+/* =========================================================
+   TEST RESULTS
+========================================================= */
+
+function showTestResults(){
+
+    stopTimer();
+
+
+    const totalQuestions =
+        questions.length;
+
+
+    const attempted =
+        log.length;
+
+
+    const correct =
+        log.filter(
+            x=>x.ok
+        ).length;
+
+
+    const wrong =
+        attempted-correct;
+
+
+    const percentage =
+        attempted===0
+        ? 0
+        :
+        (
+            (correct/attempted)
+            *100
+        ).toFixed(1);
+
+
+    const totalTime =
+        log.reduce(
+            (sum,item)=>
+                sum+item.time,
+            0
+        );
+
+
+    const averageTime =
+        attempted===0
+        ? 0
+        :
+        totalTime/attempted;
+
+
+    document
+        .getElementById("questionNo")
+        .textContent =
+        "Test Analysis";
+
+
+    document
+        .getElementById("timer")
+        .textContent =
+        formatTime(totalTime);
+
+
+    document
+        .getElementById("testContent")
+        .innerHTML = `
+
+        <div class="question-type">
+
+            Test Analysis
+
+        </div>
+
+
+        <div class="result-title">
+
+            Test Complete
+
+        </div>
+
+
+        <div class="result-panel">
+
+            <div class="result-grid">
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Total Questions
+                    </div>
+
+                    <div class="value">
+                        ${totalQuestions}
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Attempted
+                    </div>
+
+                    <div class="value">
+                        ${attempted}
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Correct
+                    </div>
+
+                    <div class="value">
+                        ${correct}
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Wrong
+                    </div>
+
+                    <div class="value">
+                        ${wrong}
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Correctness
+                    </div>
+
+                    <div class="value">
+                        ${percentage}%
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Total Time
+                    </div>
+
+                    <div class="value">
+                        ${formatTime(totalTime)}
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Average Time / Question
+                    </div>
+
+                    <div class="value">
+                        ${formatTime(averageTime)}
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="label">
+                        Completion
+                    </div>
+
+                    <div class="value">
+                        ${attempted}/${totalQuestions}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="answer-area">
+
+            <button
+                class="submit-btn"
+                onclick="showStartScreen()">
+
+                New Test
+
+            </button>
+
+        </div>
+
+        `;
+
+}
+
+
+/* =========================================================
+   TEST LOG
+========================================================= */
+
+function renderLog(){
+
+    const list =
+        document.getElementById("logList");
+
+
+    if(!questions.length){
+
+        list.innerHTML="";
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        questions.map((q,i)=>{
+
+            const item =
+                log[i];
+
+
+            return `
+
+            <div class="log-item">
+
+                <div class="q">
+
+                    ${i+1}
+
+                </div>
+
+
+                <div class="details">
+
+                    ${q.difficulty}
+
+                    <br>
+
+                    ${
+                        item
+                        ? item.detail
+                        : "Waiting…"
+                    }
+
+                </div>
+
+
+                <div
+                    class="result ${
+                        item
+                        ?
+                        (
+                            item.ok
+                            ?
+                            "correct"
+                            :
+                            "wrong"
+                        )
+                        :
+                        "pending"
+                    }">
+
+                    ${
+                        item
+                        ?
+                        (
+                            item.ok
+                            ?
+                            "✓"
+                            :
+                            "✗"
+                        )
+                        :
+                        "—"
+                    }
+
+                    <br>
+
+                    ${
+                        item
+                        ?
+                        formatTime(item.time)
+                        :
+                        ""
+                    }
+
+                </div>
+
+            </div>
+
+            `;
+
+        }).join("");
+
+
+    document
+        .getElementById("score")
+        .textContent =
+        `${log.filter(x=>x.ok).length} / ${log.length}`;
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 buildTable();
+
 </script>
+
 </body>
 </html>
+```
