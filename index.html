@@ -1,251 +1,1081 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>India GK Map</title>
-
+<title>India & World Map – Geography for Exam Prep</title>
 
 <style>
+:root {
+  --bg: #ffffff;
+  --ink: #1d2733;
+  --muted: #6b7785;
 
-/* =========================================================
-   BASIC
-========================================================= */
+  --region-fill: #e3eaf2;
+  --region-hover: #a9c3de;
+  --region-stroke: #7e8da0;
+
+  --tip-bg: #1d2733;
+  --tip-ink: #ffffff;
+
+  --accent: #1f5f99;
+}
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
+  height: 100%;
+  margin: 0;
 }
 
 body {
-
-    background: #ffffff;
-
-    color: #1d2733;
-
-    font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-
-    display: flex;
-
-    flex-direction: column;
-
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
-
 
 /* =========================================================
    HEADER
 ========================================================= */
 
-header {
-
-    position: relative;
-
-    text-align: center;
-
-    padding: 10px 20px 5px;
-
-    flex-shrink: 0;
-
+.top {
+  position: relative;
+  padding: 18px 16px 6px;
+  text-align: center;
 }
 
-h1 {
-
-    margin: 0;
-
-    font-size:
-        clamp(1.7rem, 3vw, 2.4rem);
-
-    font-weight: 700;
-
-    letter-spacing: 0.04em;
-
+.titles h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-.subtitle {
-
-    margin-top: 2px;
-
-    font-size: 1rem;
-
-    color: #6b7785;
-
+.titles p {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
 }
 
+/* Left navigation button */
+.back {
+  position: absolute;
+  left: 16px;
+  top: 18px;
 
-/* =========================================================
-   BACK BUTTON
-========================================================= */
+  padding: 7px 14px;
 
-#backButton {
+  font: inherit;
+  font-size: 0.95rem;
 
-    position: absolute;
+  color: var(--accent);
+  background: #fff;
 
-    left: 18px;
+  border: 1px solid #c5d3e2;
+  border-radius: 6px;
 
-    top: 14px;
-
-    padding:
-        7px 14px;
-
-    background: #ffffff;
-
-    color: #1f5f99;
-
-    border:
-        1px solid #c7d4e1;
-
-    border-radius: 6px;
-
-    font-size: 14px;
-
-    cursor: pointer;
-
-    display: none;
-
+  cursor: pointer;
 }
 
-#backButton:hover {
-
-    background: #f1f6fa;
-
+.back:hover {
+  background: #f0f5fa;
 }
 
+.back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.back[hidden] {
+  display: none;
+}
+
+/* World button */
+.world-btn {
+  position: absolute;
+  right: 16px;
+  top: 18px;
+
+  padding: 7px 14px;
+
+  font: inherit;
+  font-size: 0.95rem;
+
+  color: var(--accent);
+  background: #fff;
+
+  border: 1px solid #c5d3e2;
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.world-btn:hover {
+  background: #f0f5fa;
+}
+
+.world-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.world-btn[hidden] {
+  display: none;
+}
 
 /* =========================================================
    MAP AREA
 ========================================================= */
 
-#mapContainer {
+#map-root {
+  flex: 1;
+  min-height: 0;
 
-    flex: 1;
+  padding: 8px 12px 16px;
 
-    min-height: 0;
-
-    padding:
-        5px 15px 15px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#mapContainer svg {
-
-    width: 100%;
-
-    height: 100%;
-
-    max-width: 1400px;
-
-    display: block;
-
+#map-root svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
+.status {
+  color: var(--muted);
+  text-align: center;
+
+  max-width: 650px;
+
+  line-height: 1.5;
+}
 
 /* =========================================================
-   MAP REGION
+   MAP REGIONS
 ========================================================= */
 
 .region {
+  fill: var(--region-fill);
 
-    fill: #e3eaf2;
+  stroke: var(--region-stroke);
+  stroke-width: 0.8;
 
-    stroke: #718296;
+  vector-effect: non-scaling-stroke;
 
-    stroke-width: 0.8;
+  stroke-linejoin: round;
 
-    vector-effect: non-scaling-stroke;
-
-    stroke-linejoin: round;
-
-    transition:
-        fill 0.12s ease,
-        stroke 0.12s ease;
-
+  transition:
+    fill 0.08s ease;
 }
 
 .region:hover {
-
-    fill: #a9c3de;
-
-    stroke: #466985;
-
+  fill: var(--region-hover);
 }
 
-
-/* India states are clickable */
-
-.india-map .region {
-
-    cursor: pointer;
-
+/* India map states are clickable */
+.level-india .region {
+  cursor: pointer;
 }
 
-
-/* Districts are NOT clickable */
-
-.state-map .region {
-
-    cursor: default;
-
+/* World countries are clickable */
+.level-world .region {
+  cursor: pointer;
 }
 
+/* State districts are NOT clickable */
+.level-state .region {
+  cursor: default;
+}
+
+/* Country ADM1 divisions are NOT clickable */
+.level-country .region {
+  cursor: default;
+}
 
 /* =========================================================
    TOOLTIP
 ========================================================= */
 
-#tooltip {
+.tooltip {
+  position: fixed;
 
-    position: fixed;
+  left: 0;
+  top: 0;
 
-    z-index: 1000;
+  z-index: 100;
 
-    pointer-events: none;
+  padding: 6px 11px;
 
-    display: none;
+  font-size: 0.95rem;
+  font-weight: 600;
 
-    padding:
-        7px 12px;
+  color: var(--tip-ink);
+  background: var(--tip-bg);
 
-    background: #1d2733;
+  border-radius: 6px;
 
-    color: white;
+  pointer-events: none;
 
-    border-radius: 6px;
+  white-space: nowrap;
+}
 
-    font-size: 14px;
+.tooltip[hidden] {
+  display: none;
+}
 
-    font-weight: 600;
+/* =========================================================
+   MOBILE
+========================================================= */
 
-    white-space: nowrap;
+@media (max-width: 700px) {
 
-    box-shadow:
-        0 4px 12px rgba(0,0,0,0.15);
+  .top {
+    padding-top: 60px;
+  }
+
+  .back {
+    top: 12px;
+    left: 12px;
+  }
+
+  .world-btn {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 430px) {
+
+  .back,
+  .world-btn {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .titles h1 {
+    font-size: 1.35rem;
+  }
+
+  .titles p {
+    font-size: 0.85rem;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+
+  <!-- Back navigation -->
+  <button
+    id="back-btn"
+    class="back"
+    type="button"
+    hidden>
+    ← India
+  </button>
+
+  <!-- World button -->
+  <button
+    id="world-btn"
+    class="world-btn"
+    type="button">
+    🌍 World
+  </button>
+
+  <div class="titles">
+
+    <h1 id="title">
+      India Map
+    </h1>
+
+    <p id="subtitle">
+      Interactive Map
+    </p>
+
+  </div>
+
+</header>
+
+
+<main
+  id="map-root"
+  aria-live="polite">
+
+  <p class="status">
+    Loading map…
+  </p>
+
+</main>
+
+
+<div
+  id="tooltip"
+  class="tooltip"
+  role="tooltip"
+  hidden>
+</div>
+
+
+<script>
+
+/* =========================================================
+   INDIA + WORLD GEOGRAPHY MAP
+=========================================================
+
+   Navigation:
+
+   INDIA
+      ↓ click state
+   STATE
+      ↓ hover district
+   DISTRICT
+
+   WORLD
+      ↓ click country
+   COUNTRY
+      ↓ hover state/province/region
+   ADM1
+
+   Important:
+   - India states are clickable.
+   - India districts are NOT clickable.
+   - World countries are clickable.
+   - Country ADM1 divisions are NOT clickable.
+========================================================= */
+
+
+/* =========================================================
+   DOM ELEMENTS
+========================================================= */
+
+const root =
+  document.getElementById("map-root");
+
+const tooltip =
+  document.getElementById("tooltip");
+
+const backBtn =
+  document.getElementById("back-btn");
+
+const worldBtn =
+  document.getElementById("world-btn");
+
+const titleEl =
+  document.getElementById("title");
+
+const subtitleEl =
+  document.getElementById("subtitle");
+
+
+/* =========================================================
+   DATA SOURCES
+========================================================= */
+
+
+/* -------------------------
+   INDIA
+------------------------- */
+
+const INDIA_BASES = [
+
+  "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/INDIA/",
+
+  "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/INDIA/"
+
+];
+
+const STATE_BASES = [
+
+  "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/STATES/",
+
+  "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/STATES/"
+
+];
+
+const INDIA_FILE =
+  "INDIA_STATES.geojson";
+
+
+/* -------------------------
+   WORLD COUNTRIES
+------------------------- */
+
+/*
+   Natural Earth country polygons.
+
+   This is the country layer used
+   for the World Map.
+*/
+
+const WORLD_COUNTRIES_URL =
+  "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson";
+
+
+/* -------------------------
+   COUNTRY ADM1
+------------------------- */
+
+/*
+   geoBoundaries API
+
+   ADM1 =
+   first administrative level.
+
+   Examples:
+
+   USA -> States
+   India -> States
+   Canada -> Provinces
+   China -> Provinces
+   Japan -> Prefectures
+   etc.
+*/
+
+const GEOboundariesAPI =
+  "https://www.geoboundaries.org/api/current/gbOpen";
+
+
+/* =========================================================
+   INDIA STATE FOLDERS
+========================================================= */
+
+const STATE_FOLDER = {
+
+  "Andhra Pradesh":
+    "ANDHRA PRADESH",
+
+  "Arunachal Pradesh":
+    "ARUNACHAL PRADESH",
+
+  "Assam":
+    "ASSAM",
+
+  "Bihar":
+    "BIHAR",
+
+  "Chhattisgarh":
+    "CHHATTISGARH",
+
+  "Goa":
+    "GOA",
+
+  "Gujarat":
+    "GUJARAT",
+
+  "Haryana":
+    "HARYANA",
+
+  "Himachal Pradesh":
+    "HIMACHAL PRADESH",
+
+  "Jharkhand":
+    "JHARKHAND",
+
+  "Karnataka":
+    "KARNATAKA",
+
+  "Kerala":
+    "KERALA",
+
+  "Madhya Pradesh":
+    "MADHYA PRADESH",
+
+  "Maharashtra":
+    "MAHARASHTRA",
+
+  "Manipur":
+    "MANIPUR",
+
+  "Meghalaya":
+    "MEGHALAYA",
+
+  "Mizoram":
+    "MIZORAM",
+
+  "Nagaland":
+    "NAGALAND",
+
+  "Odisha":
+    "ORISSA",
+
+  "Punjab":
+    "PUNJAB",
+
+  "Rajasthan":
+    "RAJASTHAN",
+
+  "Sikkim":
+    "SIKKIM",
+
+  "Tamil Nadu":
+    "TAMIL NADU",
+
+  "Telangana":
+    "TELANGANA",
+
+  "Tripura":
+    "TRIPURA",
+
+  "Uttar Pradesh":
+    "UTTAR PRADESH",
+
+  "Uttarakhand":
+    "UTTARAKHAND",
+
+  "West Bengal":
+    "WEST BENGAL",
+
+  "Andaman and Nicobar Islands":
+    "ANDAMAN AND NICOBAR ISLANDS",
+
+  "Chandigarh":
+    "CHANDIGARH",
+
+  "Dadra and Nagar Haveli and Daman and Diu":
+    "DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
+
+  "Delhi":
+    "DELHI",
+
+  "Jammu and Kashmir":
+    "JAMMU AND KASHMIR",
+
+  "Ladakh":
+    "LADAKH",
+
+  "Lakshadweep":
+    "LAKSHADWEEP",
+
+  "Puducherry":
+    "PUDUCHERRY"
+
+};
+
+
+/*
+   Some state folder/file names don't
+   always exactly match the displayed name.
+*/
+
+const STATE_FILE_NAME = {
+
+  "Odisha":
+    "ODISHA_DISTRICTS.geojson"
+
+};
+
+
+/* =========================================================
+   INDIA NAMES
+========================================================= */
+
+const CANONICAL_STATES = [
+
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry"
+
+];
+
+
+const ALIASES = {
+
+  "orissa":
+    "Odisha",
+
+  "uttaranchal":
+    "Uttarakhand",
+
+  "telengana":
+    "Telangana",
+
+  "pondicherry":
+    "Puducherry",
+
+  "nctofdelhi":
+    "Delhi",
+
+  "jammukashmir":
+    "Jammu and Kashmir",
+
+  "andamanandnicobar":
+    "Andaman and Nicobar Islands",
+
+  "andamannicobarislands":
+    "Andaman and Nicobar Islands",
+
+  "dadraandnagarhaveli":
+    "Dadra and Nagar Haveli and Daman and Diu",
+
+  "damananddiu":
+    "Dadra and Nagar Haveli and Daman and Diu"
+
+};
+
+
+const normKey = value => {
+
+  return String(value)
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]/g, "");
+
+};
+
+
+const CANONICAL_BY_NORM =
+  Object.fromEntries(
+
+    CANONICAL_STATES.map(
+      state => [
+        normKey(state),
+        state
+      ]
+    )
+
+  );
+
+
+function canonicalState(value) {
+
+  if (!value) {
+    return null;
+  }
+
+  const key =
+    normKey(value);
+
+  return (
+    CANONICAL_BY_NORM[key] ||
+    ALIASES[key] ||
+    null
+  );
+
+}
+
+
+/* =========================================================
+   PROPERTY HELPERS
+========================================================= */
+
+const STATE_KEYS = [
+
+  "STATE",
+  "ST_NM",
+  "STATE_NAME",
+  "NAME_1",
+  "state",
+  "st_nm",
+  "State",
+  "stname",
+  "STNAME",
+  "STATE_UT"
+
+];
+
+
+const DISTRICT_KEYS = [
+
+  "DISTRICT",
+  "DT_NAME",
+  "DIST_NAME",
+  "NAME_2",
+  "district",
+  "dtname",
+  "DTNAME",
+  "District",
+  "dist_name",
+  "NAME"
+
+];
+
+
+function pickProperty(
+  properties,
+  candidates
+) {
+
+  if (!properties) {
+    return null;
+  }
+
+  for (const candidate of candidates) {
+
+    if (
+      properties[candidate] !== undefined &&
+      properties[candidate] !== null &&
+      properties[candidate] !== ""
+    ) {
+
+      return candidate;
+
+    }
+
+  }
+
+  /*
+     Case-insensitive fallback.
+  */
+
+  const actualKeys =
+    Object.keys(properties);
+
+  for (const candidate of candidates) {
+
+    const found =
+      actualKeys.find(
+        key =>
+          key.toLowerCase() ===
+          candidate.toLowerCase()
+      );
+
+    if (found) {
+      return found;
+    }
+
+  }
+
+  return null;
+
+}
+
+
+/* =========================================================
+   GENERAL HELPERS
+========================================================= */
+
+function slugify(value) {
+
+  return String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+}
+
+
+function titleCase(value) {
+
+  return String(value)
+    .trim()
+    .toLowerCase()
+    .replace(
+      /(^|[\s(/-])([a-z])/g,
+      (match, a, b) =>
+        a + b.toUpperCase()
+    );
+
+}
+
+
+/* =========================================================
+   GEOMETRY
+========================================================= */
+
+function polygonsOf(geometry) {
+
+  if (!geometry) {
+    return [];
+  }
+
+  if (geometry.type === "Polygon") {
+
+    return [
+      geometry.coordinates
+    ];
+
+  }
+
+  if (geometry.type === "MultiPolygon") {
+
+    return geometry.coordinates;
+
+  }
+
+  return [];
+
+}
+
+
+/* =========================================================
+   SIMPLIFICATION
+========================================================= */
+
+function perpDist(p, a, b) {
+
+  const dx =
+    b[0] - a[0];
+
+  const dy =
+    b[1] - a[1];
+
+  if (
+    dx === 0 &&
+    dy === 0
+  ) {
+
+    return Math.hypot(
+      p[0] - a[0],
+      p[1] - a[1]
+    );
+
+  }
+
+  const t =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        (
+          (p[0] - a[0]) * dx +
+          (p[1] - a[1]) * dy
+        ) /
+        (dx * dx + dy * dy)
+      )
+    );
+
+  return Math.hypot(
+
+    p[0] -
+      (a[0] + t * dx),
+
+    p[1] -
+      (a[1] + t * dy)
+
+  );
+
+}
+
+
+function simplifyRing(
+  points,
+  tolerance
+) {
+
+  const n =
+    points.length;
+
+  if (
+    n <= 4 ||
+    tolerance <= 0
+  ) {
+
+    return points;
+
+  }
+
+  const keep =
+    new Uint8Array(n);
+
+  keep[0] = 1;
+  keep[n - 1] = 1;
+
+  const stack = [
+    [0, n - 1]
+  ];
+
+  while (stack.length) {
+
+    const [start, end] =
+      stack.pop();
+
+    let maxDistance = 0;
+    let index = -1;
+
+    for (
+      let i = start + 1;
+      i < end;
+      i++
+    ) {
+
+      const distance =
+        perpDist(
+          points[i],
+          points[start],
+          points[end]
+        );
+
+      if (
+        distance >
+        maxDistance
+      ) {
+
+        maxDistance =
+          distance;
+
+        index = i;
+
+      }
+
+    }
+
+    if (
+      index !== -1 &&
+      maxDistance > tolerance
+    ) {
+
+      keep[index] = 1;
+
+      stack.push(
+        [start, index],
+        [index, end]
+      );
+
+    }
+
+  }
+
+  const output =
+    points.filter(
+      (_, index) =>
+        keep[index]
+    );
+
+  return output.length >= 4
+    ? output
+    : points;
+
+}
+
+
+function cleanPolygons(
+  geometry,
+  tolerance
+) {
+
+  const result = [];
+
+  for (
+    const polygon
+    of polygonsOf(geometry)
+  ) {
+
+    const rings = [];
+
+    for (
+      let i = 0;
+      i < polygon.length;
+      i++
+    ) {
+
+      const points =
+        polygon[i].map(
+          coordinate => [
+
+            Math.round(
+              coordinate[0] * 1e4
+            ) / 1e4,
+
+            Math.round(
+              coordinate[1] * 1e4
+            ) / 1e4
+
+          ]
+        );
+
+      const simplified =
+        simplifyRing(
+          points,
+          tolerance
+        );
+
+      if (
+        simplified.length >= 4
+      ) {
+
+        rings.push(
+          simplified
+        );
+
+      } else if (
+        i === 0
+      ) {
+
+        break;
+
+      }
+
+    }
+
+    if (rings.length) {
+      result.push(rings);
+    }
+
+  }
+
+  return result;
+
+}
+
+
+function toGeometry(polygons) {
+
+  if (
+    polygons.length === 1
+  ) {
+
+    return {
+      type: "Polygon",
+      coordinates: polygons[0]
+    };
+
+  }
+
+  return {
+    type: "MultiPolygon",
+    coordinates: polygons
+  };
 
 }
 
@@ -254,687 +1084,921 @@ h1 {
    STATUS
 ========================================================= */
 
-.status {
+function showStatus(message) {
 
-    color: #6b7785;
+  root.className = "";
 
-    text-align: center;
+  root.innerHTML = "";
 
-    font-size: 16px;
+  const p =
+    document.createElement("p");
 
-    line-height: 1.5;
+  p.className = "status";
 
-    padding: 20px;
+  p.textContent =
+    message;
 
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    header {
-
-        padding-top: 55px;
-
-    }
-
-    #backButton {
-
-        left: 12px;
-
-        top: 12px;
-
-    }
-
-    #mapContainer {
-
-        padding: 5px;
-
-    }
+  root.appendChild(p);
 
 }
 
-</style>
 
-</head>
-
-
-<body>
-
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
-<header>
-
-    <button
-        id="backButton"
-        type="button"
-    >
-        ← India
-    </button>
-
-
-    <h1 id="title">
-        India Map
-    </h1>
-
-
-    <div
-        id="subtitle"
-        class="subtitle"
-    >
-        Interactive Map
-    </div>
-
-</header>
-
-
-<!-- =====================================================
-     MAP
-===================================================== -->
-
-<main id="mapContainer">
-
-    <div class="status">
-        Loading India map...
-    </div>
-
-</main>
-
-
-<!-- =====================================================
-     TOOLTIP
-===================================================== -->
-
-<div id="tooltip"></div>
-
-
-
-<script>
-
-
-/* =========================================================
-   DATA SOURCES
-========================================================= */
-
-const INDIA_BASES = [
-
-    "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/INDIA/",
-
-    "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/INDIA/"
-
-];
-
-
-const STATE_BASES = [
-
-    "https://raw.githubusercontent.com/datta07/INDIAN-SHAPEFILES/master/STATES/",
-
-    "https://cdn.jsdelivr.net/gh/datta07/INDIAN-SHAPEFILES@master/STATES/"
-
-];
-
-
-const INDIA_FILE =
-    "INDIA_STATES.geojson";
-
-
-/* =========================================================
-   STATE FOLDER NAMES
-
-   IMPORTANT:
-   These are the actual folder names used by the dataset.
-
-   Folder:
-       STATES/MAHARASHTRA/
-
-   File:
-       MAHARASHTRA_DISTRICTS.geojson
-========================================================= */
-
-const STATE_FOLDER = {
-
-    "Andhra Pradesh":
-        "ANDHRA PRADESH",
-
-    "Arunachal Pradesh":
-        "ARUNACHAL PRADESH",
-
-    "Assam":
-        "ASSAM",
-
-    "Bihar":
-        "BIHAR",
-
-    "Chhattisgarh":
-        "CHHATTISGARH",
-
-    "Goa":
-        "GOA",
-
-    "Gujarat":
-        "GUJARAT",
-
-    "Haryana":
-        "HARYANA",
-
-    "Himachal Pradesh":
-        "HIMACHAL PRADESH",
-
-    "Jharkhand":
-        "JHARKHAND",
-
-    "Karnataka":
-        "KARNATAKA",
-
-    "Kerala":
-        "KERALA",
-
-    "Madhya Pradesh":
-        "MADHYA PRADESH",
-
-    "Maharashtra":
-        "MAHARASHTRA",
-
-    "Manipur":
-        "MANIPUR",
-
-    "Meghalaya":
-        "MEGHALAYA",
-
-    "Mizoram":
-        "MIZORAM",
-
-    "Nagaland":
-        "NAGALAND",
-
-    "Odisha":
-        "ORISSA",
-
-    "Punjab":
-        "PUNJAB",
-
-    "Rajasthan":
-        "RAJASTHAN",
-
-    "Sikkim":
-        "SIKKIM",
-
-    "Tamil Nadu":
-        "TAMIL NADU",
-
-    "Telangana":
-        "TELANGANA",
-
-    "Tripura":
-        "TRIPURA",
-
-    "Uttar Pradesh":
-        "UTTAR PRADESH",
-
-    "Uttarakhand":
-        "UTTARAKHAND",
-
-    "West Bengal":
-        "WEST BENGAL",
-
-    "Andaman and Nicobar Islands":
-        "ANDAMAN AND NICOBAR ISLANDS",
-
-    "Chandigarh":
-        "CHANDIGARH",
-
-    "Dadra and Nagar Haveli and Daman and Diu":
-        "DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
-
-    "Delhi":
-        "DELHI",
-
-    "Jammu and Kashmir":
-        "JAMMU AND KASHMIR",
-
-    "Ladakh":
-        "LADAKH",
-
-    "Lakshadweep":
-        "LAKSHADWEEP",
-
-    "Puducherry":
-        "PUDUCHERRY"
-
-};
-
-
-/* =========================================================
-   SPECIAL FILE NAME MAPPING
-
-   Usually:
-
-       FOLDER/FOLDER_DISTRICTS.geojson
-
-   But Odisha's repository folder uses ORISSA.
-========================================================= */
-
-const STATE_FILE_NAME = {
-
-    "Odisha":
-        "ODISHA_DISTRICTS.geojson"
-
-};
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const mapContainer =
-    document.getElementById(
-        "mapContainer"
-    );
-
-
-const tooltip =
-    document.getElementById(
-        "tooltip"
-    );
-
-
-const titleElement =
-    document.getElementById(
-        "title"
-    );
-
-
-const subtitleElement =
-    document.getElementById(
-        "subtitle"
-    );
-
-
-const backButton =
-    document.getElementById(
-        "backButton"
-    );
-
-
-/* =========================================================
-   NORMALIZE STATE NAME
-
-   THIS FIXES:
-
-       MAHARASHTRA
-       Maharashtra
-       maharashtra
-
-   All become:
-
-       Maharashtra
-========================================================= */
-
-const CANONICAL_STATES = {
-
-    "andhra pradesh":
-        "Andhra Pradesh",
-
-    "arunachal pradesh":
-        "Arunachal Pradesh",
-
-    "assam":
-        "Assam",
-
-    "bihar":
-        "Bihar",
-
-    "chhattisgarh":
-        "Chhattisgarh",
-
-    "goa":
-        "Goa",
-
-    "gujarat":
-        "Gujarat",
-
-    "haryana":
-        "Haryana",
-
-    "himachal pradesh":
-        "Himachal Pradesh",
-
-    "jharkhand":
-        "Jharkhand",
-
-    "karnataka":
-        "Karnataka",
-
-    "kerala":
-        "Kerala",
-
-    "madhya pradesh":
-        "Madhya Pradesh",
-
-    "maharashtra":
-        "Maharashtra",
-
-    "manipur":
-        "Manipur",
-
-    "meghalaya":
-        "Meghalaya",
-
-    "mizoram":
-        "Mizoram",
-
-    "nagaland":
-        "Nagaland",
-
-    "odisha":
-        "Odisha",
-
-    "orissa":
-        "Odisha",
-
-    "punjab":
-        "Punjab",
-
-    "rajasthan":
-        "Rajasthan",
-
-    "sikkim":
-        "Sikkim",
-
-    "tamil nadu":
-        "Tamil Nadu",
-
-    "telangana":
-        "Telangana",
-
-    "tripura":
-        "Tripura",
-
-    "uttar pradesh":
-        "Uttar Pradesh",
-
-    "uttarakhand":
-        "Uttarakhand",
-
-    "west bengal":
-        "West Bengal",
-
-    "andaman and nicobar islands":
-        "Andaman and Nicobar Islands",
-
-    "chandigarh":
-        "Chandigarh",
-
-    "dadra and nagar haveli and daman and diu":
-        "Dadra and Nagar Haveli and Daman and Diu",
-
-    "delhi":
-        "Delhi",
-
-    "jammu and kashmir":
-        "Jammu and Kashmir",
-
-    "ladakh":
-        "Ladakh",
-
-    "lakshadweep":
-        "Lakshadweep",
-
-    "puducherry":
-        "Puducherry",
-
-    "pondicherry":
-        "Puducherry"
-
-};
-
-
-function normalizeStateName(
-    value
+function showError(
+  error,
+  retryFunction
 ) {
 
-    if (!value) {
+  console.error(error);
 
-        return null;
+  root.className = "";
 
-    }
+  root.innerHTML = "";
 
+  const box =
+    document.createElement("div");
 
-    const cleaned =
-        String(value)
-            .trim()
-            .replace(/\s+/g, " ");
+  box.className =
+    "status";
 
+  const p =
+    document.createElement("p");
 
-    const key =
-        cleaned.toLowerCase();
+  p.textContent =
+    "Could not load the map. (" +
+    error.message +
+    ")";
 
+  box.appendChild(p);
 
-    return (
-        CANONICAL_STATES[key]
-        || cleaned
-    );
+  const retry =
+    document.createElement("button");
+
+  retry.textContent =
+    "Retry";
+
+  retry.style.padding =
+    "7px 14px";
+
+  retry.style.cursor =
+    "pointer";
+
+  retry.onclick =
+    retryFunction;
+
+  box.appendChild(retry);
+
+  root.appendChild(box);
 
 }
 
 
 /* =========================================================
-   FETCH JSON
+   FETCH HELPERS
 ========================================================= */
 
 async function fetchFromBases(
-    bases,
-    path
+  bases,
+  path
 ) {
 
-    let lastError = null;
+  let lastError =
+    null;
 
+  for (
+    const base
+    of bases
+  ) {
 
-    for (
-        const base of bases
-    ) {
+    try {
 
-        const url =
-            base + path;
-
-
-        try {
-
-            console.log(
-                "Trying:",
-                url
-            );
-
-
-            const response =
-                await fetch(url);
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    `HTTP ${response.status}`
-                );
-
-            }
-
-
-            return await response.json();
-
-        }
-        catch (error) {
-
-            console.warn(
-                "Failed:",
-                url,
-                error
-            );
-
-
-            lastError =
-                error;
-
-        }
-
-    }
-
-
-    throw new Error(
-        `Unable to load ${path}. ` +
-        (
-            lastError
-                ? lastError.message
-                : ""
-        )
-    );
-
-}
-
-
-/* =========================================================
-   FIND PROPERTY
-========================================================= */
-
-function findProperty(
-    properties,
-    names
-) {
-
-    if (!properties) {
-
-        return null;
-
-    }
-
-
-    const keys =
-        Object.keys(
-            properties
+      const response =
+        await fetch(
+          base + path
         );
 
+      if (!response.ok) {
 
-    for (
-        const wanted of names
-    ) {
+        throw new Error(
+          "HTTP " +
+          response.status
+        );
 
-        const match =
-            keys.find(
-                key =>
-                    key.toLowerCase()
-                    ===
-                    wanted.toLowerCase()
+      }
+
+      return await response.json();
+
+    } catch (error) {
+
+      console.warn(
+        "Could not load:",
+        base + path,
+        error
+      );
+
+      lastError =
+        error;
+
+    }
+
+  }
+
+  throw new Error(
+    "Unable to download map data. " +
+    (
+      lastError
+        ? lastError.message
+        : ""
+    )
+  );
+
+}
+
+
+/* =========================================================
+   INDIA MAP LOADING
+========================================================= */
+
+let indiaPromise = null;
+
+
+async function loadIndiaData() {
+
+  if (!indiaPromise) {
+
+    indiaPromise =
+      (async () => {
+
+        const geojson =
+          await fetchFromBases(
+            INDIA_BASES,
+            INDIA_FILE
+          );
+
+        const grouped =
+          new Map();
+
+        for (
+          const feature
+          of geojson.features
+        ) {
+
+          const properties =
+            feature.properties || {};
+
+          const stateKey =
+            pickProperty(
+              properties,
+              STATE_KEYS
             );
 
+          if (!stateKey) {
 
-        if (match) {
+            throw new Error(
+              "No state-name property found."
+            );
 
-            const value =
-                properties[match];
+          }
 
+          const state =
+            canonicalState(
+              properties[stateKey]
+            );
 
-            if (
-                value !== null &&
-                value !== undefined &&
-                String(value).trim()
-            ) {
+          if (!state) {
 
-                return value;
+            console.warn(
+              "Unknown state:",
+              properties[stateKey]
+            );
 
-            }
+            continue;
+
+          }
+
+          if (
+            !grouped.has(state)
+          ) {
+
+            grouped.set(
+              state,
+              []
+            );
+
+          }
+
+          grouped
+            .get(state)
+            .push(
+              ...cleanPolygons(
+                feature.geometry,
+                0.004
+              )
+            );
 
         }
 
-    }
+
+        const features = [];
 
 
-    return null;
+        for (
+          const state
+          of CANONICAL_STATES
+        ) {
+
+          const polygons =
+            grouped.get(state);
+
+          if (
+            !polygons ||
+            !polygons.length
+          ) {
+
+            console.warn(
+              "No geometry for:",
+              state
+            );
+
+            continue;
+
+          }
+
+          features.push({
+
+            type: "Feature",
+
+            properties: {
+
+              id:
+                slugify(state),
+
+              name:
+                state
+
+            },
+
+            geometry:
+              toGeometry(polygons)
+
+          });
+
+        }
+
+
+        return {
+
+          type:
+            "FeatureCollection",
+
+          features
+
+        };
+
+      })()
+      .catch(error => {
+
+        indiaPromise = null;
+
+        throw error;
+
+      });
+
+  }
+
+  return indiaPromise;
 
 }
 
 
 /* =========================================================
-   GET POLYGONS
+   INDIA STATE DISTRICT LOADER
 ========================================================= */
 
-function getPolygons(
-    geometry
+const stateCache =
+  new Map();
+
+
+async function loadStateDistricts(
+  stateName
 ) {
 
-    if (!geometry) {
+  const canonical =
+    canonicalState(
+      stateName
+    ) || stateName;
 
-        return [];
+  if (
+    stateCache.has(canonical)
+  ) {
 
+    return stateCache.get(
+      canonical
+    );
+
+  }
+
+
+  const folder =
+    STATE_FOLDER[canonical];
+
+  if (!folder) {
+
+    throw new Error(
+      "No district dataset configured for " +
+      canonical
+    );
+
+  }
+
+
+  let fileName =
+    STATE_FILE_NAME[canonical];
+
+
+  if (!fileName) {
+
+    fileName =
+      folder +
+      "_DISTRICTS.geojson";
+
+  }
+
+
+  const path =
+    encodeURIComponent(folder) +
+    "/" +
+    encodeURIComponent(fileName);
+
+
+  const geojson =
+    await fetchFromBases(
+      STATE_BASES,
+      path
+    );
+
+
+  const features = [];
+
+
+  for (
+    const feature
+    of geojson.features
+  ) {
+
+    const properties =
+      feature.properties || {};
+
+    const districtKey =
+      pickProperty(
+        properties,
+        DISTRICT_KEYS
+      );
+
+    if (!districtKey) {
+      continue;
     }
 
+    const districtName =
+      titleCase(
+        properties[districtKey]
+      );
 
-    if (
-        geometry.type ===
-        "Polygon"
-    ) {
+    const polygons =
+      cleanPolygons(
+        feature.geometry,
+        0.0015
+      );
 
-        return [
-            geometry.coordinates
-        ];
-
+    if (!polygons.length) {
+      continue;
     }
 
+    features.push({
 
-    if (
-        geometry.type ===
-        "MultiPolygon"
-    ) {
+      type:
+        "Feature",
 
-        return geometry.coordinates;
+      properties: {
 
-    }
+        id:
+          slugify(
+            canonical +
+            "-" +
+            districtName
+          ),
+
+        name:
+          districtName
+
+      },
+
+      geometry:
+        toGeometry(polygons)
+
+    });
+
+  }
 
 
-    return [];
+  if (!features.length) {
+
+    throw new Error(
+      "No districts found for " +
+      canonical
+    );
+
+  }
+
+
+  const result = {
+
+    type:
+      "FeatureCollection",
+
+    features
+
+  };
+
+
+  stateCache.set(
+    canonical,
+    result
+  );
+
+
+  return result;
 
 }
 
 
 /* =========================================================
-   WEB MERCATOR PROJECTION
+   WORLD COUNTRIES
+========================================================= */
+
+let worldPromise = null;
+
+
+async function loadWorldCountries() {
+
+  if (!worldPromise) {
+
+    worldPromise =
+      fetch(
+        WORLD_COUNTRIES_URL
+      )
+      .then(response => {
+
+        if (!response.ok) {
+
+          throw new Error(
+            "HTTP " +
+            response.status
+          );
+
+        }
+
+        return response.json();
+
+      })
+      .then(geojson => {
+
+        const features = [];
+
+
+        for (
+          const feature
+          of geojson.features
+        ) {
+
+          const properties =
+            feature.properties || {};
+
+
+          /*
+             Natural Earth uses
+             several possible ISO/name
+             properties depending on
+             the version.
+          */
+
+          const name =
+            properties.NAME ||
+            properties.ADMIN ||
+            properties.name ||
+            properties.NAME_LONG;
+
+
+          const iso =
+            properties.ADM0_A3 ||
+            properties.ISO_A3 ||
+            properties.iso_a3 ||
+            properties["ISO3166-1-Alpha-3"];
+
+
+          if (!name) {
+            continue;
+          }
+
+
+          /*
+             Remove Antarctica from the
+             clickable country list because
+             it is not a normal country
+             with ADM1 states/provinces.
+          */
+
+          if (
+            String(name)
+              .toLowerCase() ===
+            "antarctica"
+          ) {
+
+            continue;
+
+          }
+
+
+          const polygons =
+            cleanPolygons(
+              feature.geometry,
+              0.02
+            );
+
+
+          if (!polygons.length) {
+            continue;
+          }
+
+
+          features.push({
+
+            type:
+              "Feature",
+
+            properties: {
+
+              id:
+                iso ||
+                slugify(name),
+
+              name:
+                name,
+
+              iso:
+                iso || ""
+
+            },
+
+            geometry:
+              toGeometry(polygons)
+
+          });
+
+        }
+
+
+        return {
+
+          type:
+            "FeatureCollection",
+
+          features
+
+        };
+
+      })
+      .catch(error => {
+
+        worldPromise = null;
+
+        throw error;
+
+      });
+
+  }
+
+  return worldPromise;
+
+}
+
+
+/* =========================================================
+   COUNTRY ADM1 DATA
+========================================================= */
+
+const countryADM1Cache =
+  new Map();
+
+
+async function loadCountryADM1(
+  country
+) {
+
+  const iso =
+    String(
+      country.iso || ""
+    ).toUpperCase();
+
+
+  if (!iso) {
+
+    throw new Error(
+      "No ISO code found for " +
+      country.name
+    );
+
+  }
+
+
+  if (
+    countryADM1Cache.has(iso)
+  ) {
+
+    return countryADM1Cache.get(
+      iso
+    );
+
+  }
+
+
+  /*
+     Ask geoBoundaries for
+     the country's ADM1 layer.
+  */
+
+  const metadataURL =
+    GEOboundariesAPI +
+    "/" +
+    encodeURIComponent(iso) +
+    "/ADM1/";
+
+
+  const metadataResponse =
+    await fetch(
+      metadataURL
+    );
+
+
+  if (
+    !metadataResponse.ok
+  ) {
+
+    throw new Error(
+      "ADM1 API HTTP " +
+      metadataResponse.status
+    );
+
+  }
+
+
+  const metadata =
+    await metadataResponse.json();
+
+
+  /*
+     The API normally returns an
+     object containing boundary
+     metadata.
+
+     This helper makes the code
+     tolerant of array/object
+     response formats.
+  */
+
+  let boundary =
+    metadata;
+
+
+  if (
+    Array.isArray(metadata)
+  ) {
+
+    boundary =
+      metadata[0];
+
+  }
+
+
+  if (
+    !boundary ||
+    typeof boundary !== "object"
+  ) {
+
+    throw new Error(
+      "No ADM1 information found for " +
+      country.name
+    );
+
+  }
+
+
+  /*
+     Some API responses can contain
+     the boundary information nested
+     inside an array/object.
+  */
+
+  if (
+    Array.isArray(
+      boundary.boundaries
+    )
+  ) {
+
+    boundary =
+      boundary.boundaries[0];
+
+  }
+
+
+  const geoJSONURL =
+    boundary.simplifiedGeometryGeoJSON ||
+    boundary.gjDownloadURL ||
+    boundary.geoJSON;
+
+
+  if (!geoJSONURL) {
+
+    throw new Error(
+      "No ADM1 GeoJSON URL returned for " +
+      country.name
+    );
+
+  }
+
+
+  const geoResponse =
+    await fetch(
+      geoJSONURL
+    );
+
+
+  if (
+    !geoResponse.ok
+  ) {
+
+    throw new Error(
+      "ADM1 GeoJSON HTTP " +
+      geoResponse.status
+    );
+
+  }
+
+
+  const geojson =
+    await geoResponse.json();
+
+
+  const features = [];
+
+
+  for (
+    const feature
+    of geojson.features || []
+  ) {
+
+    const properties =
+      feature.properties || {};
+
+
+    /*
+       geoBoundaries property
+       names can vary.
+
+       Try the common possibilities.
+    */
+
+    const nameKey =
+      pickProperty(
+        properties,
+        [
+
+          "shapeName",
+          "NAME_1",
+          "NAME",
+          "name",
+          "Name",
+          "NAME_0",
+          "boundaryName"
+
+        ]
+      );
+
+
+    const divisionName =
+      nameKey
+        ? properties[nameKey]
+        : "Unknown";
+
+
+    const polygons =
+      cleanPolygons(
+        feature.geometry,
+        0.003
+      );
+
+
+    if (!polygons.length) {
+      continue;
+    }
+
+
+    features.push({
+
+      type:
+        "Feature",
+
+      properties: {
+
+        id:
+          slugify(
+            country.name +
+            "-" +
+            divisionName
+          ),
+
+        name:
+          titleCase(
+            divisionName
+          )
+
+      },
+
+      geometry:
+        toGeometry(polygons)
+
+    });
+
+  }
+
+
+  if (!features.length) {
+
+    throw new Error(
+      "No first-level divisions found for " +
+      country.name
+    );
+
+  }
+
+
+  const result = {
+
+    type:
+      "FeatureCollection",
+
+    features
+
+  };
+
+
+  countryADM1Cache.set(
+    iso,
+    result
+  );
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   PROJECTION
 ========================================================= */
 
 function project(
-    longitude,
-    latitude
+  longitude,
+  latitude
 ) {
 
-    const radians =
-        Math.PI / 180;
+  const radians =
+    Math.PI / 180;
+
+  const clampedLatitude =
+    Math.max(
+      -85,
+      Math.min(
+        85,
+        latitude
+      )
+    );
 
 
-    const lat =
-        Math.max(
-            -85,
-            Math.min(
-                85,
-                latitude
-            )
-        );
+  return [
 
+    longitude * radians,
 
-    return [
+    -Math.log(
+      Math.tan(
+        Math.PI / 4 +
+        (
+          clampedLatitude *
+          radians
+        ) / 2
+      )
+    )
 
-        longitude * radians,
-
-        -Math.log(
-            Math.tan(
-                Math.PI / 4 +
-                (lat * radians) / 2
-            )
-        )
-
-    ];
+  ];
 
 }
 
@@ -943,184 +2007,183 @@ function project(
    BOUNDS
 ========================================================= */
 
-function getBounds(
-    features
+function computeBounds(
+  features
 ) {
 
-    let minX =
-        Infinity;
+  let minX =
+    Infinity;
 
-    let minY =
-        Infinity;
+  let minY =
+    Infinity;
 
-    let maxX =
-        -Infinity;
+  let maxX =
+    -Infinity;
 
-    let maxY =
-        -Infinity;
+  let maxY =
+    -Infinity;
 
+
+  for (
+    const feature
+    of features
+  ) {
 
     for (
-        const feature of features
+      const polygon
+      of polygonsOf(
+        feature.geometry
+      )
     ) {
 
-        const polygons =
-            getPolygons(
-                feature.geometry
+      for (
+        const ring
+        of polygon
+      ) {
+
+        for (
+          const coordinate
+          of ring
+        ) {
+
+          const [
+            x,
+            y
+          ] =
+            project(
+              coordinate[0],
+              coordinate[1]
             );
 
 
-        for (
-            const polygon of polygons
-        ) {
+          if (x < minX)
+            minX = x;
 
-            for (
-                const ring of polygon
-            ) {
+          if (x > maxX)
+            maxX = x;
 
-                for (
-                    const coordinate
-                    of ring
-                ) {
+          if (y < minY)
+            minY = y;
 
-                    const [
-                        x,
-                        y
-                    ] =
-                        project(
-                            coordinate[0],
-                            coordinate[1]
-                        );
-
-
-                    minX =
-                        Math.min(
-                            minX,
-                            x
-                        );
-
-
-                    maxX =
-                        Math.max(
-                            maxX,
-                            x
-                        );
-
-
-                    minY =
-                        Math.min(
-                            minY,
-                            y
-                        );
-
-
-                    maxY =
-                        Math.max(
-                            maxY,
-                            y
-                        );
-
-                }
-
-            }
+          if (y > maxY)
+            maxY = y;
 
         }
 
+      }
+
     }
 
+  }
 
-    return {
-        minX,
-        minY,
-        maxX,
-        maxY
-    };
+
+  return {
+
+    minX,
+    minY,
+    maxX,
+    maxY
+
+  };
 
 }
 
 
 /* =========================================================
-   BUILD SVG PATH
+   SVG PATH
 ========================================================= */
 
-function buildPath(
-    geometry,
-    transform
+function buildPathData(
+  geometry,
+  transform
 ) {
 
-    const output = [];
+  const parts = [];
 
 
-    const polygons =
-        getPolygons(
-            geometry
-        );
-
+  for (
+    const polygon
+    of polygonsOf(geometry)
+  ) {
 
     for (
-        const polygon of polygons
+      const ring
+      of polygon
     ) {
 
-        for (
-            const ring of polygon
+      let d = "";
+
+      let lastX = null;
+      let lastY = null;
+
+
+      for (
+        let i = 0;
+        i < ring.length;
+        i++
+      ) {
+
+        const [
+          x,
+          y
+        ] =
+          transform(
+            ring[i][0],
+            ring[i][1]
+          );
+
+
+        /*
+           Avoid generating excessive
+           duplicate SVG coordinates.
+        */
+
+        if (
+          lastX !== null &&
+          Math.abs(
+            x - lastX
+          ) < 0.15 &&
+          Math.abs(
+            y - lastY
+          ) < 0.15
         ) {
 
-            let path = "";
-
-
-            for (
-                let i = 0;
-                i < ring.length;
-                i++
-            ) {
-
-                const [
-                    longitude,
-                    latitude
-                ] =
-                    ring[i];
-
-
-                const [
-                    x,
-                    y
-                ] =
-                    transform(
-                        longitude,
-                        latitude
-                    );
-
-
-                path +=
-                    (
-                        path
-                            ? "L"
-                            : "M"
-                    )
-                    +
-                    x.toFixed(2)
-                    +
-                    " "
-                    +
-                    y.toFixed(2);
-
-            }
-
-
-            if (path) {
-
-                output.push(
-                    path + "Z"
-                );
-
-            }
+          continue;
 
         }
 
+
+        d +=
+          (
+            d
+              ? "L"
+              : "M"
+          ) +
+          x.toFixed(2) +
+          " " +
+          y.toFixed(2);
+
+
+        lastX = x;
+        lastY = y;
+
+      }
+
+
+      if (d) {
+
+        parts.push(
+          d + "Z"
+        );
+
+      }
+
     }
 
+  }
 
-    return output.join("");
+
+  return parts.join("");
 
 }
 
@@ -1130,270 +2193,259 @@ function buildPath(
 ========================================================= */
 
 function renderMap(
-    geojson,
-    level
+  geojson,
+  level
 ) {
 
-    const features =
-        (geojson.features || [])
-        .filter(
-            feature =>
-                getPolygons(
-                    feature.geometry
-                ).length
+  const features =
+    geojson.features.filter(
+      feature =>
+        polygonsOf(
+          feature.geometry
+        ).length
+    );
+
+
+  if (!features.length) {
+
+    throw new Error(
+      "No map geometry available."
+    );
+
+  }
+
+
+  const bounds =
+    computeBounds(
+      features
+    );
+
+
+  const mapWidth =
+    bounds.maxX -
+    bounds.minX;
+
+
+  const mapHeight =
+    bounds.maxY -
+    bounds.minY;
+
+
+  /*
+     Give the map a sensible
+     maximum drawing width.
+  */
+
+  const targetWidth =
+    level === "world"
+      ? 1200
+      : 1000;
+
+
+  const scale =
+    targetWidth /
+    mapWidth;
+
+
+  const transform =
+    (longitude, latitude) => {
+
+      const [
+        x,
+        y
+      ] =
+        project(
+          longitude,
+          latitude
         );
 
 
-    if (!features.length) {
+      return [
 
-        throw new Error(
-            "No map features found."
-        );
-
-    }
-
-
-    const bounds =
-        getBounds(
-            features
-        );
-
-
-    const rangeX =
-        bounds.maxX -
-        bounds.minX;
-
-
-    const rangeY =
-        bounds.maxY -
-        bounds.minY;
-
-
-    const targetWidth =
-        1000;
-
-
-    const scale =
-        targetWidth /
-        rangeX;
-
-
-    const transform =
         (
-            longitude,
-            latitude
-        ) => {
+          x -
+          bounds.minX
+        ) * scale,
 
-            const [
-                x,
-                y
-            ] =
-                project(
-                    longitude,
-                    latitude
-                );
+        (
+          y -
+          bounds.minY
+        ) * scale
 
+      ];
 
-            return [
-
-                (
-                    x -
-                    bounds.minX
-                ) * scale,
-
-                (
-                    y -
-                    bounds.minY
-                ) * scale
-
-            ];
-
-        };
+    };
 
 
-    const width =
-        rangeX * scale;
+  const width =
+    mapWidth * scale;
 
 
-    const height =
-        rangeY * scale;
+  const height =
+    mapHeight * scale;
 
 
-    const padding = 15;
+  const padding = 15;
 
 
-    const SVG_NS =
-        "http://www.w3.org/2000/svg";
+  const SVG_NS =
+    "http://www.w3.org/2000/svg";
 
 
-    const svg =
-        document.createElementNS(
-            SVG_NS,
-            "svg"
-        );
-
-
-    svg.setAttribute(
-        "viewBox",
-
-        `${-padding} ${-padding} ` +
-        `${width + padding * 2} ` +
-        `${height + padding * 2}`
+  const svg =
+    document.createElementNS(
+      SVG_NS,
+      "svg"
     );
 
 
-    svg.setAttribute(
-        "preserveAspectRatio",
-        "xMidYMid meet"
+  svg.setAttribute(
+    "viewBox",
+    `${-padding} ${-padding} ${
+      width + padding * 2
+    } ${
+      height + padding * 2
+    }`
+  );
+
+
+  svg.setAttribute(
+    "preserveAspectRatio",
+    "xMidYMid meet"
+  );
+
+
+  svg.setAttribute(
+    "role",
+    "img"
+  );
+
+
+  let ariaLabel =
+    "Map";
+
+
+  if (level === "india") {
+
+    ariaLabel =
+      "Map of India";
+
+  }
+
+  else if (
+    level === "state"
+  ) {
+
+    ariaLabel =
+      "District map";
+
+  }
+
+  else if (
+    level === "world"
+  ) {
+
+    ariaLabel =
+      "World map";
+
+  }
+
+  else if (
+    level === "country"
+  ) {
+
+    ariaLabel =
+      "Country administrative map";
+
+  }
+
+
+  svg.setAttribute(
+    "aria-label",
+    ariaLabel
+  );
+
+
+  for (
+    const feature
+    of features
+  ) {
+
+    const path =
+      document.createElementNS(
+        SVG_NS,
+        "path"
+      );
+
+
+    path.setAttribute(
+      "d",
+      buildPathData(
+        feature.geometry,
+        transform
+      )
     );
 
 
-    svg.setAttribute(
-        "role",
-        "img"
+    path.setAttribute(
+      "class",
+      "region"
     );
 
 
-    svg.setAttribute(
-        "aria-label",
-
-        level === "india"
-            ? "Map of India"
-            : "District map"
+    path.setAttribute(
+      "fill-rule",
+      "evenodd"
     );
 
 
-    for (
-        const feature of features
+    path.dataset.id =
+      feature.properties.id ||
+      "";
+
+
+    path.dataset.name =
+      feature.properties.name ||
+      "";
+
+
+    /*
+       ISO is only needed by
+       the World Map.
+    */
+
+    if (
+      feature.properties.iso
     ) {
 
-        const path =
-            document.createElementNS(
-                SVG_NS,
-                "path"
-            );
-
-
-        path.setAttribute(
-            "d",
-
-            buildPath(
-                feature.geometry,
-                transform
-            )
-        );
-
-
-        path.classList.add(
-            "region"
-        );
-
-
-        path.setAttribute(
-            "fill-rule",
-            "evenodd"
-        );
-
-
-        const properties =
-            feature.properties || {};
-
-
-        let name;
-
-
-        if (
-            level === "india"
-        ) {
-
-            name =
-                findProperty(
-                    properties,
-
-                    [
-                        "STATE",
-                        "ST_NM",
-                        "STATE_NAME",
-                        "NAME_1",
-                        "state",
-                        "st_nm",
-                        "State",
-                        "stname",
-                        "STNAME",
-                        "STATE_UT",
-                        "NAME",
-                        "name",
-                        "Name"
-                    ]
-                );
-
-
-            name =
-                normalizeStateName(
-                    name
-                );
-
-        }
-        else {
-
-            name =
-                findProperty(
-                    properties,
-
-                    [
-                        "DISTRICT",
-                        "DT_NAME",
-                        "DIST_NAME",
-                        "NAME_2",
-                        "district",
-                        "dtname",
-                        "DTNAME",
-                        "District",
-                        "dist_name",
-                        "NAME",
-                        "name",
-                        "Name"
-                    ]
-                );
-
-
-            if (!name) {
-
-                name =
-                    "Unknown District";
-
-            }
-
-        }
-
-
-        path.dataset.name =
-            name || "Unknown";
-
-
-        svg.appendChild(
-            path
-        );
+      path.dataset.iso =
+        feature.properties.iso;
 
     }
 
 
-    mapContainer.innerHTML =
-        "";
-
-
-    mapContainer.className =
-        level === "india"
-            ? "india-map"
-            : "state-map";
-
-
-    mapContainer.appendChild(
-        svg
+    svg.appendChild(
+      path
     );
 
+  }
 
-    return svg;
+
+  root.className =
+    "level-" +
+    level;
+
+
+  root.innerHTML =
+    "";
+
+
+  root.appendChild(
+    svg
+  );
+
+
+  return svg;
 
 }
 
@@ -1403,109 +2455,94 @@ function renderMap(
 ========================================================= */
 
 function showTooltip(
-    text,
-    clientX,
-    clientY
+  text,
+  clientX,
+  clientY
 ) {
 
-    tooltip.textContent =
-        text;
+  tooltip.textContent =
+    text;
 
 
-    tooltip.style.display =
-        "block";
+  tooltip.hidden =
+    false;
 
 
-    const margin = 14;
+  const margin =
+    14;
 
 
-    const width =
-        tooltip.offsetWidth;
+  const width =
+    tooltip.offsetWidth;
 
 
-    const height =
-        tooltip.offsetHeight;
+  const height =
+    tooltip.offsetHeight;
 
 
-    let x =
-        clientX + margin;
+  let x =
+    clientX + margin;
 
 
-    let y =
-        clientY + margin;
+  let y =
+    clientY + margin;
 
 
-    if (
-        x + width >
-        window.innerWidth - 5
-    ) {
+  if (
+    x + width >
+    window.innerWidth - 4
+  ) {
 
-        x =
-            clientX -
-            width -
-            margin;
+    x =
+      clientX -
+      width -
+      margin;
 
-    }
-
-
-    if (
-        y + height >
-        window.innerHeight - 5
-    ) {
-
-        y =
-            clientY -
-            height -
-            margin;
-
-    }
+  }
 
 
-    tooltip.style.left =
-        Math.max(
-            4,
-            x
-        ) + "px";
+  if (
+    y + height >
+    window.innerHeight - 4
+  ) {
+
+    y =
+      clientY -
+      height -
+      margin;
+
+  }
 
 
-    tooltip.style.top =
-        Math.max(
-            4,
-            y
-        ) + "px";
+  tooltip.style.transform =
+    `translate(${
+      Math.max(4, x)
+    }px, ${
+      Math.max(4, y)
+    }px)`;
 
 }
 
 
 function hideTooltip() {
 
-    tooltip.style.display =
-        "none";
+  tooltip.hidden =
+    true;
 
 }
 
 
 /* =========================================================
-   REGION FROM EVENT
+   EVENT HELPERS
 ========================================================= */
 
-function getRegion(
-    event
-) {
+function regionFromEvent(e) {
 
-    if (
-        event.target instanceof
-        Element
-    ) {
-
-        return event.target.closest(
-            "path.region"
-        );
-
-    }
-
-
-    return null;
+  return e.target instanceof Element
+    ? e.target.closest(
+        "path.region"
+      )
+    : null;
 
 }
 
@@ -1515,547 +2552,621 @@ function getRegion(
 ========================================================= */
 
 function setupHover(
-    svg
+  svg
 ) {
 
-    svg.addEventListener(
-        "pointerover",
+  svg.addEventListener(
+    "pointerover",
+    e => {
 
-        event => {
+      const region =
+        regionFromEvent(e);
 
-            const region =
-                getRegion(
-                    event
-                );
+      if (region) {
 
+        showTooltip(
 
-            if (!region) {
+          region.dataset.name,
 
-                return;
+          e.clientX,
 
-            }
+          e.clientY
 
+        );
 
-            showTooltip(
+      }
 
-                region.dataset.name,
-
-                event.clientX,
-
-                event.clientY
-
-            );
-
-        }
-    );
+    }
+  );
 
 
-    svg.addEventListener(
-        "pointermove",
+  svg.addEventListener(
+    "pointermove",
+    e => {
 
-        event => {
+      const region =
+        regionFromEvent(e);
 
-            const region =
-                getRegion(
-                    event
-                );
+      if (region) {
 
+        showTooltip(
 
-            if (!region) {
+          region.dataset.name,
 
-                hideTooltip();
+          e.clientX,
 
-                return;
+          e.clientY
 
-            }
+        );
 
+      } else {
 
-            showTooltip(
+        hideTooltip();
 
-                region.dataset.name,
+      }
 
-                event.clientX,
-
-                event.clientY
-
-            );
-
-        }
-    );
+    }
+  );
 
 
-    svg.addEventListener(
-        "pointerleave",
+  svg.addEventListener(
+    "pointerleave",
+    hideTooltip
+  );
 
-        hideTooltip
-    );
+
+  svg.addEventListener(
+    "pointerdown",
+    e => {
+
+      const region =
+        regionFromEvent(e);
+
+      if (region) {
+
+        showTooltip(
+
+          region.dataset.name,
+
+          e.clientX,
+
+          e.clientY
+
+        );
+
+      }
+
+    }
+  );
 
 }
 
 
 /* =========================================================
-   INDIA CLICK
+   INDIA STATE CLICK
 ========================================================= */
 
 function setupIndiaClick(
-    svg
+  svg
 ) {
 
-    svg.addEventListener(
-        "click",
-
-        event => {
-
-            const region =
-                getRegion(
-                    event
-                );
-
-
-            if (!region) {
-
-                return;
-
-            }
-
-
-            const stateName =
-                normalizeStateName(
-                    region.dataset.name
-                );
-
-
-            console.log(
-                "Clicked state:",
-                stateName
-            );
-
-
-            openState(
-                stateName
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   LOAD INDIA MAP
-========================================================= */
-
-async function loadIndia() {
-
-    hideTooltip();
-
-
-    backButton.style.display =
-        "none";
-
-
-    titleElement.textContent =
-        "India Map";
-
-
-    subtitleElement.textContent =
-        "Interactive Map";
-
-
-    mapContainer.innerHTML = `
-
-        <div class="status">
-            Loading India map...
-        </div>
-
-    `;
-
-
-    try {
-
-        const data =
-            await fetchFromBases(
-                INDIA_BASES,
-                INDIA_FILE
-            );
-
-
-        const svg =
-            renderMap(
-                data,
-                "india"
-            );
-
-
-        setupHover(
-            svg
-        );
-
-
-        setupIndiaClick(
-            svg
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        showError(
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD STATE DISTRICTS
-========================================================= */
-
-async function loadStateDistricts(
-    stateName
-) {
-
-    /*
-        THIS IS THE IMPORTANT FIX.
-
-        The clicked state might be:
-
-            MAHARASHTRA
-
-        but normalizeStateName()
-        converts it to:
-
-            Maharashtra
-    */
-
-    const canonicalName =
-        normalizeStateName(
-            stateName
-        );
-
-
-    const folder =
-        STATE_FOLDER[
-            canonicalName
-        ];
-
-
-    if (!folder) {
-
-        throw new Error(
-            "No district dataset configured for " +
-            canonicalName
-        );
-
-    }
-
-
-    /*
-        Most files follow:
-
-        FOLDER/
-        FOLDER_DISTRICTS.geojson
-    */
-
-
-    let fileName =
-        STATE_FILE_NAME[
-            canonicalName
-        ];
-
-
-    if (!fileName) {
-
-        fileName =
-            folder +
-            "_DISTRICTS.geojson";
-
-    }
-
-
-    const encodedFolder =
-        encodeURIComponent(
-            folder
-        );
-
-
-    const encodedFile =
-        encodeURIComponent(
-            fileName
-        );
-
-
-    const path =
-        encodedFolder +
-        "/" +
-        encodedFile;
-
-
-    console.log(
-        "State:",
-        canonicalName
-    );
-
-
-    console.log(
-        "Folder:",
-        folder
-    );
-
-
-    console.log(
-        "File:",
-        fileName
-    );
-
-
-    console.log(
-        "Path:",
-        path
-    );
-
-
-    return await fetchFromBases(
-        STATE_BASES,
-        path
-    );
-
-}
-
-
-/* =========================================================
-   OPEN STATE
-========================================================= */
-
-async function openState(
-    stateName
-) {
-
-    hideTooltip();
-
-
-    const canonicalName =
-        normalizeStateName(
-            stateName
-        );
-
-
-    titleElement.textContent =
-        canonicalName;
-
-
-    subtitleElement.textContent =
-        "Districts";
-
-
-    backButton.style.display =
-        "block";
-
-
-    mapContainer.innerHTML = `
-
-        <div class="status">
-            Loading ${canonicalName} districts...
-        </div>
-
-    `;
-
-
-    try {
-
-        const data =
-            await loadStateDistricts(
-                canonicalName
-            );
-
-
-        const svg =
-            renderMap(
-                data,
-                "state"
-            );
-
-
-        /*
-            IMPORTANT:
-
-            Hover works.
-
-            NO CLICK LISTENER.
-
-            Therefore clicking a district
-            does nothing.
-        */
-
-        setupHover(
-            svg
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        showError(
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   ERROR
-========================================================= */
-
-function showError(
-    error
-) {
-
-    const message =
-        error?.message ||
-        String(error);
-
-
-    mapContainer.innerHTML = `
-
-        <div class="status">
-
-            <p>
-                Could not load the map.
-            </p>
-
-            <p>
-                ${escapeHTML(message)}
-            </p>
-
-            <button
-                id="retryButton"
-                type="button"
-                style="
-                    margin-top:15px;
-                    padding:8px 18px;
-                    background:white;
-                    border:1px solid #c7d4e1;
-                    border-radius:6px;
-                    cursor:pointer;
-                    font-size:14px;
-                "
-            >
-                Retry
-            </button>
-
-        </div>
-
-    `;
-
-
-    document
-        .getElementById(
-            "retryButton"
-        )
-        ?.addEventListener(
-            "click",
-            loadIndia
-        );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   BACK TO INDIA
-========================================================= */
-
-backButton.addEventListener(
+  svg.addEventListener(
     "click",
+    e => {
 
-    () => {
+      const region =
+        regionFromEvent(e);
 
-        loadIndia();
+      if (!region) {
+        return;
+      }
+
+
+      loadStateMap({
+
+        name:
+          region.dataset.name
+
+      });
 
     }
+  );
 
+}
+
+
+/* =========================================================
+   WORLD COUNTRY CLICK
+========================================================= */
+
+function setupWorldClick(
+  svg
+) {
+
+  svg.addEventListener(
+    "click",
+    e => {
+
+      const region =
+        regionFromEvent(e);
+
+      if (!region) {
+        return;
+      }
+
+
+      loadCountryMap({
+
+        name:
+          region.dataset.name,
+
+        iso:
+          region.dataset.iso
+
+      });
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INDIA MAP
+========================================================= */
+
+async function loadIndiaMap() {
+
+  hideTooltip();
+
+
+  /*
+     India is the main starting
+     screen.
+
+     World button is visible.
+     Back button is hidden.
+  */
+
+  backBtn.hidden =
+    true;
+
+  worldBtn.hidden =
+    false;
+
+
+  worldBtn.textContent =
+    "🌍 World";
+
+
+  titleEl.textContent =
+    "India Map";
+
+
+  subtitleEl.textContent =
+    "Interactive Map";
+
+
+  try {
+
+    showStatus(
+      "Loading India map…"
+    );
+
+
+    const data =
+      await loadIndiaData();
+
+
+    const svg =
+      renderMap(
+        data,
+        "india"
+      );
+
+
+    setupHover(
+      svg
+    );
+
+
+    setupIndiaClick(
+      svg
+    );
+
+  }
+
+  catch (error) {
+
+    showError(
+      error,
+      loadIndiaMap
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   INDIA STATE MAP
+========================================================= */
+
+async function loadStateMap(
+  state
+) {
+
+  hideTooltip();
+
+
+  /*
+     Back to India.
+  */
+
+  backBtn.hidden =
+    false;
+
+
+  backBtn.textContent =
+    "← India";
+
+
+  /*
+     World button remains
+     available.
+  */
+
+  worldBtn.hidden =
+    false;
+
+
+  worldBtn.textContent =
+    "🌍 World";
+
+
+  titleEl.textContent =
+    state.name;
+
+
+  subtitleEl.textContent =
+    "Districts";
+
+
+  try {
+
+    showStatus(
+      "Loading district map…"
+    );
+
+
+    const data =
+      await loadStateDistricts(
+        state.name
+      );
+
+
+    const svg =
+      renderMap(
+        data,
+        "state"
+      );
+
+
+    /*
+       IMPORTANT:
+
+       Districts have hover
+       only.
+
+       There is NO click
+       handler here.
+    */
+
+    setupHover(
+      svg
+    );
+
+  }
+
+  catch (error) {
+
+    showError(
+      error,
+      () =>
+        loadStateMap(
+          state
+        )
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   WORLD MAP
+========================================================= */
+
+async function loadWorldMap() {
+
+  hideTooltip();
+
+
+  /*
+     Back button goes to India.
+  */
+
+  backBtn.hidden =
+    false;
+
+
+  backBtn.textContent =
+    "← India";
+
+
+  /*
+     Change button to indicate
+     the current World screen.
+
+     Clicking it while already on
+     World simply keeps World open.
+  */
+
+  worldBtn.hidden =
+    true;
+
+
+  titleEl.textContent =
+    "World Map";
+
+
+  subtitleEl.textContent =
+    "Interactive Map";
+
+
+  try {
+
+    showStatus(
+      "Loading world map…"
+    );
+
+
+    const data =
+      await loadWorldCountries();
+
+
+    const svg =
+      renderMap(
+        data,
+        "world"
+      );
+
+
+    setupHover(
+      svg
+    );
+
+
+    setupWorldClick(
+      svg
+    );
+
+  }
+
+  catch (error) {
+
+    showError(
+      error,
+      loadWorldMap
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   COUNTRY MAP
+========================================================= */
+
+async function loadCountryMap(
+  country
+) {
+
+  hideTooltip();
+
+
+  /*
+     Back goes to World.
+  */
+
+  backBtn.hidden =
+    false;
+
+
+  backBtn.textContent =
+    "← World";
+
+
+  worldBtn.hidden =
+    true;
+
+
+  titleEl.textContent =
+    country.name;
+
+
+  subtitleEl.textContent =
+    "States / Provinces / Regions";
+
+
+  try {
+
+    showStatus(
+      "Loading " +
+      country.name +
+      " administrative map…"
+    );
+
+
+    const data =
+      await loadCountryADM1(
+        country
+      );
+
+
+    const svg =
+      renderMap(
+        data,
+        "country"
+      );
+
+
+    /*
+       IMPORTANT:
+
+       ADM1 regions only hover.
+
+       They cannot be clicked.
+    */
+
+    setupHover(
+      svg
+    );
+
+  }
+
+  catch (error) {
+
+    showError(
+
+      error,
+
+      () =>
+        loadCountryMap(
+          country
+        )
+
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+
+/*
+   World button from India
+   or India state screen.
+*/
+
+worldBtn.addEventListener(
+  "click",
+  () => {
+
+    loadWorldMap();
+
+  }
 );
 
 
-/* =========================================================
-   ESCAPE KEY
-========================================================= */
+/*
+   Back button:
+
+   India state -> India
+   World -> India
+   Country -> World
+*/
+
+backBtn.addEventListener(
+  "click",
+  () => {
+
+    /*
+       If the current title is
+       World Map, go to India.
+
+       If current subtitle is
+       States / Provinces / Regions,
+       go back to World.
+    */
+
+    if (
+      subtitleEl.textContent ===
+      "States / Provinces / Regions"
+    ) {
+
+      loadWorldMap();
+
+      return;
+
+    }
+
+
+    loadIndiaMap();
+
+  }
+);
+
+
+/*
+   ESC navigation.
+*/
 
 document.addEventListener(
-    "keydown",
+  "keydown",
+  e => {
 
-    event => {
+    if (
+      e.key !== "Escape"
+    ) {
 
-        if (
-            event.key === "Escape" &&
-            backButton.style.display !== "none"
-        ) {
-
-            loadIndia();
-
-        }
+      return;
 
     }
+
+
+    if (
+      subtitleEl.textContent ===
+      "States / Provinces / Regions"
+    ) {
+
+      loadWorldMap();
+
+    }
+
+    else if (
+      titleEl.textContent ===
+      "World Map"
+    ) {
+
+      loadIndiaMap();
+
+    }
+
+    else if (
+      !backBtn.hidden
+    ) {
+
+      loadIndiaMap();
+
+    }
+
+  }
 );
 
 
 /* =========================================================
-   START
+   START APPLICATION
 ========================================================= */
 
-loadIndia();
+loadIndiaMap();
 
 </script>
 
 </body>
-
 </html>
