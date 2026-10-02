@@ -1,1 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Map — GK Study Tool</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #fafafa;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      text-align: center;
+      padding: 20px 16px 8px;
+    }
+
+    .app-header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #222;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 2px;
+      letter-spacing: 0.05em;
+    }
+
+    .map-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px 24px;
+      position: relative;
+    }
+
+    #map-svg {
+      width: 100%;
+      max-width: 900px;
+      max-height: 82vh;
+      background: transparent;
+    }
+
+    /* State paths — clickable */
+    .state-path {
+      fill: #f0f0f0;
+      stroke: #ccc;
+      stroke-width: 0.8;
+      cursor: pointer;
+      transition: fill 0.12s ease, stroke 0.12s ease;
+    }
+
+    .state-path:hover {
+      fill: #d6e4f0;
+      stroke: #8aa8c0;
+      stroke-width: 1.2;
+    }
+
+    /* District paths — hover only, not clickable */
+    .district-path {
+      fill: #f5f5f5;
+      stroke: #ddd;
+      stroke-width: 0.5;
+      cursor: default;
+      transition: fill 0.12s ease, stroke 0.12s ease;
+    }
+
+    .district-path:hover {
+      fill: #e8eef5;
+      stroke: #a0b8cc;
+      stroke-width: 1;
+    }
+
+    /* Back button */
+    .back-btn {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #333;
+      z-index: 10;
+      transition: background 0.1s;
+    }
+
+    .back-btn:hover {
+      background: #f0f0f0;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: fixed;
+      pointer-events: none;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      white-space: nowrap;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.1s;
+      transform: translate(-50%, -100%);
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+    }
+
+    /* Loading / error message */
+    .map-message {
+      font-size: 1rem;
+      color: #999;
+      text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .app-header h1 {
+        font-size: 1.1rem;
+      }
+      .subtitle {
+        font-size: 0.72rem;
+      }
+      #map-svg {
+        max-height: 75vh;
+      }
+      .back-btn {
+        top: 8px;
+        left: 10px;
+        padding: 5px 10px;
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <h1>INDIA MAP</h1>
+    <p class="subtitle">Interactive Map</p>
+  </header>
+
+  <div class="map-container">
+    <button id="back-btn" class="back-btn" hidden>&larr; India</button>
+    <svg id="map-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="tooltip" class="tooltip" hidden></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+    // ============================================================
+    // India GK Map — Minimal Interactive Map (100% English UI)
+    // Features:
+    //   - Hover state -> show state name
+    //   - Click state -> show detailed state map with districts
+    //   - Hover district -> show district name
+    //   - Click district -> no action
+    //   - Back to India button
+    // ============================================================
+
+    const DATA_BASE = "./data";
+
+    // Global state
+    let currentLevel = "india";        // "india" | "state"
+    let currentStateName = null;
+
+    // DOM references
+    const svg = d3.select("#map-svg");
+    const tooltip = document.getElementById("tooltip");
+    const backBtn = document.getElementById("back-btn");
+
+    // Projection & path generator
+    let projection;
+    let pathGenerator;
+
+    // GeoJSON cache
+    const geoCache = {};
+
+    // ============================================================
+    // Initialization
+    // ============================================================
+
+    function initProjection() {
+      // India bounds: approx 68E-97E, 6N-37N
+      // Mercator projection centered on India
+      projection = d3.geoMercator()
+        .center([82, 22])
+        .scale(750)
+        .translate([500, 480]);
+
+      pathGenerator = d3.geoPath().projection(projection);
+    }
+
+    // ============================================================
+    // Utility functions
+    // ============================================================
+
+    async function loadGeoJSON(url) {
+      if (geoCache[url]) return geoCache[url];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`Failed to load ${url}: ${resp.status}`);
+      const data = await resp.json();
+      geoCache[url] = data;
+      return data;
+    }
+
+    function showTooltip(event, name) {
+      tooltip.textContent = name;
+      tooltip.hidden = false;
+      tooltip.classList.add("visible");
+      moveTooltip(event);
+    }
+
+    function moveTooltip(event) {
+      tooltip.style.left = event.clientX + "px";
+      tooltip.style.top = (event.clientY - 12) + "px";
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove("visible");
+      tooltip.hidden = true;
+    }
+
+    function getFeatureName(feature) {
+      const props = feature.properties || {};
+      return props.shapeName || props.name || props.NAME || "Unknown";
+    }
+
+    // ============================================================
+    // India map (state level)
+    // ============================================================
+
+    async function loadIndiaMap() {
+      currentLevel = "india";
+      currentStateName = null;
+      backBtn.hidden = true;
+      hideTooltip();
+
+      const geojson = await loadGeoJSON(`${DATA_BASE}/india-adm1.geojson`);
+      renderMap(geojson.features, "state");
+      setupStateHover();
+      setupStateClick();
+    }
+
+    function renderMap(features, level) {
+      svg.selectAll("*").remove();
+
+      const className = level === "state" ? "state-path" : "district-path";
+
+      svg.selectAll("path")
+        .data(features)
+        .enter()
+        .append("path")
+        .attr("class", className)
+        .attr("d", pathGenerator)
+        .attr("data-name", d => getFeatureName(d));
+    }
+
+    // ============================================================
+    // State interactions
+    // ============================================================
+
+    function setupStateHover() {
+      svg.selectAll(".state-path")
+        .on("mouseover", function (event, d) {
+          showTooltip(event, getFeatureName(d));
+        })
+        .on("mousemove", function (event) {
+          moveTooltip(event);
+        })
+        .on("mouseout", function () {
+          hideTooltip();
+        });
+    }
+
+    function setupStateClick() {
+      svg.selectAll(".state-path")
+        .on("click", function (event, d) {
+          const stateName = getFeatureName(d);
+          loadStateMap(stateName);
+        });
+    }
+
+    // ============================================================
+    // Detailed state map (districts)
+    // ============================================================
+
+    async function loadStateMap(stateName) {
+      currentLevel = "state";
+      currentStateName = stateName;
+      backBtn.hidden = false;
+      hideTooltip();
+
+      const allDistricts = await loadGeoJSON(`${DATA_BASE}/india-adm2.geojson`);
+
+      // Filter districts belonging to this state
+      let features = allDistricts.features.filter(f => {
+        const group = f.properties.shapeGroup || "";
+        return group === stateName;
+      });
+
+      // Fallback: fuzzy match on shapeGroup / state field
+      if (features.length === 0) {
+        const target = stateName.toLowerCase();
+        features = allDistricts.features.filter(f => {
+          const group = (f.properties.shapeGroup || f.properties.state || "").toLowerCase();
+          return group === target || group.includes(target) || target.includes(group);
+        });
+      }
+
+      if (features.length === 0) {
+        console.warn(`No districts found for ${stateName}`);
+        svg.selectAll("*").remove();
+        return;
+      }
+
+      // Re-fit projection to this state's bounds
+      fitProjectionToFeatures(features);
+
+      renderMap(features, "district");
+      setupDistrictHover();
+    }
+
+    function fitProjectionToFeatures(features) {
+      const geoB = d3.geoBounds({
+        type: "FeatureCollection",
+        features: features
+      });
+
+      const [[minLon, minLat], [maxLon, maxLat]] = geoB;
+      const centerLon = (minLon + maxLon) / 2;
+      const centerLat = (minLat + maxLat) / 2;
+
+      const lonSpan = maxLon - minLon;
+      const latSpan = maxLat - minLat;
+      const maxSpan = Math.max(lonSpan, latSpan);
+      const scale = 850 / maxSpan;
+
+      projection
+        .center([centerLon, centerLat])
+        .scale(scale)
+        .translate([500, 500]);
+
+      pathGenerator = d3.geoPath().projection(projection);
+    }
+
+    // ============================================================
+    // District hover (no click action)
+    // ============================================================
+
+    function setupDistrictHover() {
+      svg.selectAll(".district-path")
+        .on("mouseover", function (event, d) {
+          showTooltip(event, getFeatureName(d));
+        })
+        .on("mousemove", function (event) {
+          moveTooltip(event);
+        })
+        .on("mouseout", function () {
+          hideTooltip();
+        });
+      // Intentionally NO click handler — clicking a district does nothing.
+    }
+
+    // ============================================================
+    // Reset back to India
+    // ============================================================
+
+    function resetToIndia() {
+      initProjection();
+      loadIndiaMap();
+    }
+
+    // ============================================================
+    // Event bindings
+    // ============================================================
+
+    backBtn.addEventListener("click", resetToIndia);
+
+    window.addEventListener("mousemove", (e) => {
+      if (tooltip.classList.contains("visible")) {
+        moveTooltip(e);
+      }
+    });
+
+    // ============================================================
+    // Start
+    // ============================================================
+
+    initProjection();
+    loadIndiaMap().catch(err => {
+      console.error("Failed to load India map:", err);
+      document.getElementById("map-svg").innerHTML =
+        '<text x="500" y="500" text-anchor="middle" fill="#999" font-family="sans-serif" font-size="16">Failed to load map data</text>';
+    });
+  </script>
+</body>
+</html>
