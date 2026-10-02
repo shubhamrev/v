@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Portal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            background: #f4f1e8;
+            color: #2f2f2f;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            background: #fffdf7;
+            border: 1px solid #d6cfbf;
+            box-shadow: 0 10px 30px rgba(60, 50, 30, 0.12);
+            padding: 55px 50px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: normal;
+            color: #263238;
+            margin-bottom: 10px;
+        }
+
+        .line {
+            width: 70px;
+            height: 2px;
+            background: #8b7355;
+            margin: 20px auto 25px;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #6b665d;
+            margin-bottom: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            width: 210px;
+            padding: 16px 20px;
+
+            background: #263238;
+            color: #ffffff;
+
+            border: 1px solid #263238;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 17px;
+
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #8b7355;
+            border-color: #8b7355;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 45px;
+            font-size: 13px;
+            color: #8a857b;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            .title {
+                font-size: 30px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1 class="title">Study Portal</h1>
+
+        <div class="line"></div>
+
+        <p class="subtitle">
+            Select a section to continue your study
+        </p>
+
+        <div class="buttons">
+
+            <a href="map.html" class="btn">
+                🗺️ &nbsp; Map
+            </a>
+
+            <a href="table.html" class="btn">
+                📚 &nbsp; Study Table
+            </a>
+
+        </div>
+
+        <div class="footer">
+            Learn • Explore • Revise
+        </div>
+
+    </div>
+
+</body>
+</html>
