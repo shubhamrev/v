@@ -442,7 +442,6 @@ function submitFactors(){
     const correct = current.answer;
     const nums = vals.map(v=>v===""?NaN:Number(v));
     // each correct factor entered once (order does not matter)
-    const used = new Set();
     let ok = nums.every(v=>correct.includes(v)) && new Set(nums).size===correct.length;
     boxes.forEach((b,i)=>{
         const v = nums[i];
